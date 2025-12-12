@@ -1,0 +1,13 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+/* :root{
+  height: 200%;
+} */
+
+a{
+  text-decoration: none;
+  color: black;
+}
+
