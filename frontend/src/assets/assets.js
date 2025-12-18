@@ -1,16 +1,47 @@
-import p1 from '../assets/1.jpg'
-import p2 from '../assets/download.jpg'
-import bg1 from '../assets/download(1).jpeg'
-import bg2 from '../assets/download(2).jpeg'
+import p1 from '../assets/1.jpg';
+import p2 from '../assets/download.jpg';
+// import bg1 from '../assets/download(1).jpeg';
+// import bg2 from '../assets/download(2).jpeg';
+import { 
+  LayoutDashboard, 
+  ArrowLeftRight, 
+  PieChart, 
+  Target, 
+  BarChart3, 
+  LogOut,
+  PlusCircle,  
+  Bell,        
+  Search,       
+  UserCog
+} from 'lucide-react';
 
 export const assets = {
-    p1,p2,bg1, bg2
+    p1,p2
+    // , bg2, bg1
 }
-export const pageLink = [  // these are being used to link to other pages easily
-    {name: "Home" , path: '/'},
-    {name: "About" , path: '/aboutus'},
-    {name: "Services" , path: '/services'},
-]
+
+export const Icons = {
+  Dashboard: LayoutDashboard,
+  Transactions: ArrowLeftRight,
+  Budget: PieChart,
+  Goals: Target,
+  Analytics: BarChart3,
+  Account:  UserCog,
+  Logout: LogOut,
+  Add: PlusCircle,
+  Notification: Bell,
+  Search: Search
+};
+
+
+export const SidebarLinks = [
+  { id: 1, label: 'Overview', path: '/owner/dashboard', icon: Icons.Dashboard },
+  { id: 2, label: 'Transactions', path: '/owner/transactions', icon: Icons.Transactions },
+  { id: 3, label: 'Budgeting', path: '/owner/budget', icon: Icons.Budget },
+  { id: 4, label: 'Savings Goals', path: '/owner/goals', icon: Icons.Goals },
+  { id: 5, label: 'Analytics', path: '/owner/analytics', icon: Icons.Analytics },
+  { id: 6, label: 'Account', path: '/owner/account', icon: Icons.Account },
+];
 
 export const dummyUserData = {
     "_id": "23t2f298y23e2iiyr2680987",
@@ -27,5 +58,7 @@ export const dummyUserData = {
 
 // ]
 
-// F2F8FB the color for the bg 
-// 2546EA color for the diff btns
+// #F2F8FB , #002366, 
+// #2546EA
+// #B0E0E6 the color for the bg 
+// #2546EA color for the diff btns

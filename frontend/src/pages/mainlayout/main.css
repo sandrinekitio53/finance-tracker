@@ -1,0 +1,139 @@
+/* =========================================
+   1. GLOBAL LAYOUT (The "Frame")
+   ========================================= */
+.layout-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Prevents the whole screen from scrolling */
+  font-family: 'Inter', sans-serif;
+  background-color: #f8fafc; /* Very light grey for the content background */
+}
+
+/* =========================================
+   2. SIDEBAR (The Left Side)
+   ========================================= */
+.sidebar {
+  width: 260px;
+  background-color: #F2F8FB;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+
+.sidebar-header {
+  padding: 30px 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 20px;
+}
+
+.nav-menu {
+  flex: 1; /* Takes up available space */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 15px;
+}
+
+/* =========================================
+   3. NAV ITEMS (The "Uniform")
+   ========================================= */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 18px;
+  /* color: white; */
+  text-decoration: none;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.nav-item:hover {
+  background-color: rgba(130, 162, 221, 0.178); /* Very faint Powder Blue */
+  transform: translateX(5px); /* Subtle slide effect */
+}
+
+/* ICON STYLING (The separate wrapper you asked for) */
+.nav-icon {
+    width: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #121246cc;
+}
+.nav-item.nav-icon:hover{
+background-color: #2546EA;
+}
+
+.nav-text {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* =========================================
+   4. ACTIVE STATE (The Highlight)
+   ========================================= */
+.nav-item.active {
+  background-color: #2546EA; /* Powder Blue */
+  color: white;           /* Royal Blue text */
+  font-weight: 600;
+}
+
+.nav-item.active .nav-icon {
+  color: white;           
+}
+
+/*                       the logout btn             */
+.logout-button {
+  margin-top: auto; 
+  margin-bottom: 20px;
+  margin-left: 15px;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 14px 18px;
+  background-color: #e11d48; 
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #be123c;
+}
+
+
+.content-wrapper {
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.content-header {
+  height: 70px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.page-display {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto; /* Makes only the content area scrollable */
+}
