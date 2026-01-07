@@ -19,7 +19,6 @@ const Sidebar = ({ onLogout }) => {
               to={link.path} 
               className={location.pathname === link.path ? "nav-item active" : "nav-item"}
             >
-              {/* Treating the icon like a separate element you can style */}
               <span className="nav-icon">
                 <link.icon />
               </span>

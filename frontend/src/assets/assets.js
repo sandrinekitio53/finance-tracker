@@ -12,7 +12,8 @@ import {
   PlusCircle,  
   Bell,        
   Search,       
-  UserCog
+  UserCog,
+  UserRound
 } from 'lucide-react';
 
 export const assets = {
@@ -30,7 +31,8 @@ export const Icons = {
   Logout: LogOut,
   Add: PlusCircle,
   Notification: Bell,
-  Search: Search
+  Search: Search,
+  User: UserRound
 };
 
 

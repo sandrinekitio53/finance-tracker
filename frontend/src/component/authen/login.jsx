@@ -12,6 +12,12 @@ function Login({ onLoginSuccess }) {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+//   const userData = {
+//   firstName: fNameInput, // Value from your input field
+//   lastName: lNameInput,
+//   email: emailInput,
+//   profilePic: null       // Since they just signed up, they won't have one yet
+// };
  
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,9 +29,6 @@ function Login({ onLoginSuccess }) {
       
       // Assuming a successful response means the credentials matched the XAMPP/MySQL data
       console.log('Login successful!', response.data);
-
-      // **TO DO:** In a real application, you would save the token (e.g., response.data.token) 
-      // to local storage here.
 
       // 3. Call the success function passed from App.jsx
       onLoginSuccess(); 
@@ -55,11 +58,7 @@ function Login({ onLoginSuccess }) {
 
       <div className='l1'>
         <label htmlFor="password">Password</label>
-        <input type="password" id="password" value={password}
-          // 3.
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
       </div>
 
       <button type="submit">Log In</button>

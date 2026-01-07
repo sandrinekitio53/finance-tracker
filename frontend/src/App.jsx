@@ -11,6 +11,7 @@ import Account from './pages/account/account';
 import Analytics from './pages/analytics/analytic';
 import Goals from './pages/goals/goal';
 import Mainlayout from './pages/mainlayout/mainlayout';
+import { useState } from 'react';
 
 
 
@@ -21,8 +22,9 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false); 
 
   // Function to be called from LoginForm upon successful backend login
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = (data) => {
     setIsAuthenticated(true);
+    setUserData(data);
   };
   
   // this one handles the logout and i paased as prop in the sidebar and mainlayout
@@ -30,16 +32,23 @@ const App = () => {
     setIsAuthenticated(false);   
   }
 
+  const [userData, setUserData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    profilePic: null
+  });
+
   return (
  
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={isAuthenticated ? (<Navigate to="/owner" replace />) : (<Login onLoginSuccess={handleLoginSuccess} />)}/>
-        <Route path="/signup" element={<Signup />}/>
+        <Route path="/signup" element={<Signup onLoginSuccess={handleLoginSuccess} />}/>
 
 
         {/* THE PROTECTED ROUTES SECTION */}
-      <Route path="/owner" element={isAuthenticated ? <Mainlayout onLogout={handleLogout} /> : <Navigate to="/login" replace />}>
+      <Route path="/owner" element={isAuthenticated ? <Mainlayout user={userData} onLogout={handleLogout} /> : <Navigate to="/login" replace />}>
         {/* These are "Child" routes. They render inside MainLayout's <Outlet /> */}
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="transactions" element={<Transactions />} />
