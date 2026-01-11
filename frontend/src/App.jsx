@@ -63,7 +63,7 @@ React.useEffect(() => {
         {/* THE PROTECTED ROUTES SECTION */}
       <Route path="/owner" element={isAuthenticated ? <Mainlayout user={userData} onLogout={handleLogout} /> : <Navigate to="/login" replace />}>
         {/* These are "Child" routes. They render inside MainLayout's <Outlet /> */}
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="dashboard" element={<Dashboard user={userData} />} />
         <Route path="transactions" element={<Transactions />} />
         <Route path="budget" element={<Budget />} />
         <Route path="goals" element={<Goals />} />

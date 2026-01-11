@@ -183,10 +183,14 @@ background-color: #2546EA;
   gap: 3px;
   width: 150px;
 }
+.title{
+  text-transform: capitalize;
+}
 .user-name {
   font-size: 0.9rem;
   font-weight: 600;
   color: #1e293b;
+  text-transform: capitalize;
 }
 
 .user-email {

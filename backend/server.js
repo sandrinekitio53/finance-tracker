@@ -61,6 +61,21 @@ const sql = 'SELECT id, first_name, last_name, email, password FROM users WHERE 
   }
 });
 
+// to get the user  to input total balance and monthly income 
+app.post('/api-update-setup', async (req, res) => {
+  const { id, totalBalance, monthlyIncome } = req.body;
+
+  const sql = 'UPDATE users SET total_balance = ?, monthly_income = ? WHERE id = ?';
+  
+  try {
+    await db.execute(sql, [totalBalance, monthlyIncome, id]);
+    res.status(200).json({ message: 'Setup updated successfully!' });
+  } catch (error) {
+    console.error('Error updating setup:', error);
+    res.status(500).json({ message: 'Failed to update financial setup.' });
+  }
+});
+
 
 // once the app liste to this port num  means the connection was well done
 app.listen(PORT, () => {

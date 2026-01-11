@@ -13,7 +13,10 @@ import {
   Bell,        
   Search,       
   UserCog,
-  UserRound
+  UserRound,
+  Calendar,
+  ArrowUp,
+  ArrowDown
 } from 'lucide-react';
 
 export const assets = {
@@ -32,7 +35,10 @@ export const Icons = {
   Add: PlusCircle,
   Notification: Bell,
   Search: Search,
-  User: UserRound
+  User: UserRound,
+  Calendar,
+  ArrowUp,
+  ArrowDown,
 };
 
 
@@ -52,6 +58,57 @@ export const dummyUserData = {
     "role": "owner",
     "image": p2,
 }
+
+// Inside your assets/assets.js
+export const summaryCardDetails = [
+  {
+    id: "balance",
+    label: "Total Balance",
+    detail: "vs last month"
+  },
+  {
+    id: "income",
+    label: "Monthly Income",
+    detail: "Target: 500k FCFA"
+  },
+  {
+    id: "expenses",
+    label: "Total Expenses",
+    detail: "transactions this month"
+  },
+  {
+    id: "savings",
+    label: "Total Savings",
+    detail: "Keep it up!"
+  }
+];
+
+export const transactionHistory = [
+  {
+    id: 1,
+    date: "09/29/25 - 18:45",
+    category: "Transport",
+    method: "Cash in Hand",
+    amount: "500frs",
+    status: "Complete"
+  },
+  {
+    id: 2,
+    date: "09/28/25 - 20:45",
+    category: "Food",
+    method: "Cash in Hand",
+    amount: "1500frs",
+    status: "Failed"
+  },
+  {
+    id: 3,
+    date: "09/28/25 - 22:45",
+    category: "Food",
+    method: "Momo",
+    amount: "1500frs",
+    status: "Pending"
+  }
+];
 // export const ownerPageLinks = [
 //     {name: "Dashboard", path: "/owner", icon:dashboardIcon , coloredIcon:dashboardIconColored},
 //     {name:"Add expense details" , path: "/owner/Edetails"  , icon:expenseicon , coloredIcon: expenseiconColored},

@@ -1,0 +1,139 @@
+/* Dashboard Layout Container */
+.dashboard-container {
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.summary-card {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out;
+  border: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;
+}
+
+.summary-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Labels and Amounts */
+.card-label {
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.card-amount {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0.5rem 0;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+/* Detail Text (Percentage/Subtext) */
+.card-detail {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+/* Specific Card Variants */
+.text-danger { color: #ef4444; }
+.text-success { color: #10b981; }
+
+.positive { background-color: #ecfdf5; color: #10b981; }
+.neutral { background-color: #f1f5f9; color: #64748b; }
+
+/* Trend Container */
+.trend-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+/* Green for Increase */
+.trend-up {
+  color: #10b981;
+  background-color: #ecfdf5;
+}
+
+/* Red for Decrease/Loss */
+.trend-down {
+  color: #ef4444;
+  background-color: #fef2f2;
+}
+
+.trend-icon {
+  font-size: 0.9rem;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+/* The container for the bottom row of the card */
+.card-footer {
+  display: flex;
+  justify-content: space-between; /* This pushes them to opposite sides */
+  align-items: center;
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #f1f5f9; /* Optional: a very light line to separate from the amount */
+}
+
+/* Ensure the detail text doesn't look squashed */
+.card-detail-text {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* The trend pill styling */
+.trend-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  .summary-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
