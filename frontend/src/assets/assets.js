@@ -37,7 +37,7 @@ export const Icons = {
 
 
 export const SidebarLinks = [
-  { id: 1, label: 'Overview', path: '/owner/dashboard', icon: Icons.Dashboard },
+  { id: 1, label: 'Dashboard', path: '/owner/dashboard', icon: Icons.Dashboard },
   { id: 2, label: 'Transactions', path: '/owner/transactions', icon: Icons.Transactions },
   { id: 3, label: 'Budgeting', path: '/owner/budget', icon: Icons.Budget },
   { id: 4, label: 'Savings Goals', path: '/owner/goals', icon: Icons.Goals },

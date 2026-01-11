@@ -1,6 +1,7 @@
 .container{
      min-height: 100vh;
-     /* background: url('../../assets/download\ \(2\).jpeg') no-repeat center/cover; */
+     /* background: url('../../assets/download\ \(2\).jpeg') no-repeat center/cover;  */
+     /* this is the background image which i want to make alittle bit blur and the login shoul be ontop of the blur bg  */
 }
 .container, button[type="submit"]{
    display: flex;
@@ -9,13 +10,11 @@
     justify-content: center;
 }
 form{  
-     
-    padding: 3%;   
+     padding: 3%;   
     width: 300px;
     border-radius: 6px;
     border: 1px solid black
 }
-
 .container h2{    text-align: center;
     font-size: 24px;
     color: #2546EA;

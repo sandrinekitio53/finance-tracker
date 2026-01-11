@@ -34,7 +34,7 @@ app.post('/api-register', async (req, res) => {
 app.post('/api-login', async (req, res) => {
   const { email, password } = req.body;
   
-  const sql = 'SELECT id, email, password FROM users WHERE email = ?';
+const sql = 'SELECT id, first_name, last_name, email, password FROM users WHERE email = ?';
 
   try {
     const [rows] = await db.execute(sql, [email]); 
@@ -44,10 +44,13 @@ app.post('/api-login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
-    if (password === user.password) {      
+    if (password === user.password) {      // pass this data here from the dbso as to send it to the app.jsx
       return res.status(200).json({ 
         message: 'Login successful!', 
-        token: 'example_jwt_token_12345' 
+        token: 'example_jwt_token_12345',
+        firstName: user.first_name,  // pulls the data from the db
+        lastName: user.last_name,
+        email: user.email
       });
     } else {
       return res.status(401).json({ message: 'Invalid email or password.' });

@@ -24,7 +24,13 @@ const App = () => {
   // Function to be called from LoginForm upon successful backend login
   const handleLoginSuccess = (data) => {
     setIsAuthenticated(true);
-    setUserData(data);
+    const dataWithInitial = {
+      ...data,
+      userInitial: data.firstName ? data.firstName.charAt(0).toUpperCase() : 'U'
+    };
+    
+    setUserData(dataWithInitial);
+    console.log("Login Data:", data)
   };
   
   // this one handles the logout and i paased as prop in the sidebar and mainlayout
@@ -36,8 +42,15 @@ const App = () => {
     firstName: "",
     lastName: "",
     email: "",
+    userInitial: "",
     profilePic: null
   });
+
+React.useEffect(() => {
+  console.log("--- DATA WATCHER ---");
+  console.log("Current User Data:", userData);
+}, [userData]);
+  
 
   return (
  

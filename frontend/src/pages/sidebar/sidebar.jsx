@@ -9,7 +9,7 @@ const Sidebar = ({ onLogout }) => {
 
   return (
     <div className="sidebar">
-      <div className="sidebar-header">💰 FinanceTracker</div>
+      <div className="sidebar-header">logo-image FinanceTracker</div>
       
       <nav className="nav-menu">
         {SidebarLinks.map((link) => {          

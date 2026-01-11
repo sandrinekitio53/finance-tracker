@@ -6,11 +6,13 @@ import { Icons } from '../../assets/assets';
 
 
 const Mainlayout = ({user, onLogout }) => {
+  const currentUser = user || {};
 
-  const firstName = user?.firstName || "User";
-  const lastName = user?.lastName || "";
-  const email = user?.email || "No email provided";
-  const initial = firstName.charAt(0).toUpperCase();
+  const firstName = currentUser.firstName || "User";
+  const lastName = currentUser.lastName || "";
+  const email = currentUser.email || "No email provided";
+  const initial = currentUser.userInitial ||firstName.charAt(0).toUpperCase();
+  //  still need to implement the logic for this one to work and disaplay the letter of theuser if it hasnt yet uploaded the profile image.
 
   return (
     <div className="layout-container">
@@ -26,10 +28,10 @@ const Mainlayout = ({user, onLogout }) => {
 
           <div className="header-actions">
             
-            <div className="search-bar">
+            {/* <div className="search-bar">
               <Icons.Search className="icons" />
               <input type="text" placeholder="Search..." />
-            </div>
+            </div> */}
 
             <button className="icon-btn">
               <Icons.Notification className="icons" />
@@ -39,10 +41,10 @@ const Mainlayout = ({user, onLogout }) => {
             <div className="user-profile-box">
               <div className="profile-pic">
             {/* If there is a photo, show it. Otherwise, show the Initial */}
-            {user?.profilePic ? (
-              <img src={user.profilePic} alt="profile" className="profile-img" />
+            {currentUser.profilePic ? (
+              <img src={currentUser.profilePic} alt="profile" className="profile-img" />
             ) : (
-              initial
+             <span className="initial-text">{initial}</span>
             )}
           </div>
               <div className="user-info ">
@@ -53,6 +55,7 @@ const Mainlayout = ({user, onLogout }) => {
           </div>
         </header>
 
+        {/* the page to be disaplayed under the bar */}
         <main className="page-display">
           <Outlet />
         </main>

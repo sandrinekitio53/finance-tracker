@@ -11,40 +11,30 @@ function Login({ onLoginSuccess }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
-//   const userData = {
-//   firstName: fNameInput, // Value from your input field
-//   lastName: lNameInput,
-//   email: emailInput,
-//   profilePic: null       // Since they just signed up, they won't have one yet
-// };
  
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setError('');
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  setError('');
 
-    try {
-   
-      const response = await axios.post(LOGIN_API_URL, { email, password });
-      
-      // Assuming a successful response means the credentials matched the XAMPP/MySQL data
-      console.log('Login successful!', response.data);
+  try {
+    const response = await axios.post(LOGIN_API_URL, { email, password });
+    
+    // 1. Log the data to see what the backend sent (firstName or first_name?)
+    console.log('Login successful!', response.data);
 
-      // 3. Call the success function passed from App.jsx
-      onLoginSuccess(); 
-      
-      // 4. Navigate to the protected dashboard
-      // The Navigate component in App.jsx will handle the final redirect to /owner, 
-      // but this is the trigger.
-      navigate('/owner'); 
+    // 2. PASS THE DATA HERE! 
+    // This sends the user object from the backend to App.jsx
+    onLoginSuccess(response.data); 
 
-    } catch (err) {
-      // Handle login failure (e.g., invalid email/password from the server)
-      const errorMsg = err.response?.data?.message || 'Invalid email or password.';
-      setError(errorMsg);
-      console.error('Login Error:', errorMsg);
-    }
-  };
+    // 3. Navigate to the dashboard
+    navigate('/owner/dashboard'); 
+
+  } catch (err) {
+    const errorMsg = err.response?.data?.message || 'Invalid email or password.';
+    setError(errorMsg);
+    console.error('Login Error:', errorMsg);
+  }
+};
   return (
     <div className="container">
           <form onSubmit={handleSubmit}>
@@ -72,4 +62,4 @@ function Login({ onLoginSuccess }) {
 }
 
 export default Login;
-//  Update the 'password' email  state on every change when using the onchange
+//  Update the 'password', email  state on every change when using the onchange

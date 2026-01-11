@@ -5,7 +5,7 @@
   overflow: hidden; 
   background-color: #f8fafc; 
 }
-/*                the sidebar           */
+/* the sidebar */
 .sidebar {
   width: 260px;
   background-color: #F2F8FB;
@@ -69,7 +69,7 @@ background-color: #2546EA;
 .nav-item.active .nav-icon {
   color: white;           
 }
-/*                       the logout btn             */
+/*  the logout btn */
 .logout-button {
   margin-top: auto; 
   margin-bottom: 20px;
@@ -110,29 +110,25 @@ background-color: #2546EA;
   padding: 40px;
   overflow-y: auto; /* Makes only the content area scrollable */
 }
-
 /* Welcome Text */
 .title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #002366; /* Royal Blue */
+  color: #002366; 
   margin: 0;
 }
-
 .subtitle {
   font-size: 0.85rem;
   color: #64748b;
   margin: 2px 0 0 0;
 }
-
 /* Right Side Actions */
 .header-actions {
   display: flex;
   align-items: center;
   gap: 20px;
 }
-
-/* Search Bar Styling */
+/* Search Bar Styles */
 .search-bar {
   display: flex;
   align-items: center;
@@ -149,8 +145,7 @@ background-color: #2546EA;
   font-size: 0.9rem;
   width: 150px;
 }
-
-/* Notification Button */
+/* Notification Btn */
 .icon-btn {
   background: none;
   border-radius: 50%;
@@ -168,11 +163,10 @@ background-color: #2546EA;
   right: -2px;
   width: 8px;
   height: 8px;
-  background-color: #e11d48; /* Red dot */
+  background-color: #e11d48; 
   border-radius: 50%;
   border: 2px solid white;
 }
-
 /* User Profile Box */
 .user-profile-box {
   display: flex;
@@ -203,17 +197,16 @@ background-color: #2546EA;
 .profile-pic {
   width: 42px;
   height: 42px;
-  background-color: #B0E0E6; /* Powder Blue */
-  color: #002366;           /* Royal Blue */
-  border-radius: 10px;      /* Matches your sidebar items */
+  background-color: #B0E0E6; 
+  color: #002366;           
+  border-radius: 10px;     
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  /* Text Styling for the Initial */
+  /* styling of the user's intial */
   font-weight: 700;
   font-size: 1.2rem;
-  text-transform: uppercase; /* Double safety to ensure it's CAPS */
+  text-transform: uppercase; 
   border: 2px solid rgba(0, 35, 102, 0.1);
 }
 .icons{

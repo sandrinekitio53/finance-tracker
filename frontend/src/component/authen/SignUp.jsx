@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom';
 import './login.css';
 
 // The URL where your backend server/API is running
-// NOTE: You will need to change this to your actual backend API endpoint!
-
 
 const Signup = () => {
   const API_URL = 'http://localhost:8081/api-register'; 
@@ -27,10 +25,9 @@ const Signup = () => {
     };
 
     try {
-      // 2. Use axios.post() to send data to the backend
+      // axios.post() is used to communicate with the backend
       const response = await axios.post(API_URL, userData);
-
-      // Check for a successful response (usually status 200 or 201)
+      //  incase of success the 201 or 200 status will react
       setMessage(`Sign-up successful! Welcome ${response.data.user.firstName}!`);
       console.log('Backend response:', response.data);
 
@@ -43,13 +40,11 @@ const Signup = () => {
     } catch (error) {
       
       if (error.response) {
-        // e.g., error.response.data might contain a server message like 'Email already exists'
+        
         setMessage(`Error: ${error.response.data.message || 'Something went wrong on the server.'}`);
       } else if (error.request) {
-        // The request was made but no response was received (e.g., server is down)
         setMessage('Error: No response from the server. Check your backend connection.');
       } else {
-        // Something else happened while setting up the request
         setMessage('Error during sign-up. Please try again.');
         console.error('Axios error:', error.message);
       }
@@ -61,7 +56,6 @@ const Signup = () => {
       <form onSubmit={handleSubmit}>
       <h2>User <span id="login-head">Sign-Up</span> </h2>
       
-      {/* Display feedback message */}
       {message && <p style={{ color: message.startsWith('Error') ? 'red' : 'green', border: '1px solid', padding: '10px' }}>{message}</p>}
 
       <div className='l1'>
