@@ -53,7 +53,9 @@ const Signup = () => {
 
   return (
     <div className="container">
+
       <form onSubmit={handleSubmit}>
+        
       <h2>User <span id="login-head">Sign-Up</span> </h2>
       
       {message && <p style={{ color: message.startsWith('Error') ? 'red' : 'green', border: '1px solid', padding: '10px' }}>{message}</p>}

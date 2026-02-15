@@ -76,7 +76,6 @@ app.post('/api-update-setup', async (req, res) => {
   }
 });
 
-
 // once the app liste to this port num  means the connection was well done
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

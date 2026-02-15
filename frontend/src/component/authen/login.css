@@ -20,8 +20,7 @@ form{
     color: #2546EA;
 }
 #login-head{
-    text-decoration: underline;
-    
+    text-decoration: underline;    
 }
 .l1{
     margin: 10px 0px;
@@ -51,8 +50,7 @@ button[type="submit"]{
     background: #2543ea;
     border: none;
     color: white;
-    border-radius: 6px;
-    
+    border-radius: 6px;    
 }
 .p-option{
     margin-top: 15px;

@@ -9,16 +9,12 @@ const Sidebar = ({ onLogout }) => {
 
   return (
     <div className="sidebar">
-      <div className="sidebar-header">logo-image FinanceTracker</div>
+      <div className="sidebarHeader">logo-image FinanceTracker</div>
       
-      <nav className="nav-menu">
+      <nav className="navMenu">
         {SidebarLinks.map((link) => {          
           return (
-            <Link 
-              key={link.id} 
-              to={link.path} 
-              className={location.pathname === link.path ? "nav-item active" : "nav-item"}
-            >
+            <Link key={link.id} to={link.path} className={location.pathname === link.path ? "nav-item active" : "nav-item"}>
               <span className="nav-icon">
                 <link.icon />
               </span>

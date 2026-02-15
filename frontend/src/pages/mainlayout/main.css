@@ -2,73 +2,10 @@
   display: flex;
   height: 100vh;
   width: 100vw;
-  overflow: hidden; 
+  /* overflow: hidden;  */
   background-color: #f8fafc; 
 }
-/* the sidebar */
-.sidebar {
-  width: 260px;
-  background-color: #F2F8FB;
-  color: black;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-}
-.sidebar-header {
-  padding: 30px 20px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 20px;
-}
-.nav-menu {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 0 15px;
-}
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 12px 18px;
-  /* color: white; */
-  text-decoration: none;
-  border-radius: 5px;
-  transition: all 0.3s ease;
-}
 
-/*                   Hover effect               */
-.nav-item:hover {
-  background-color: rgba(130, 162, 221, 0.178); 
-  transform: translateX(5px); /* for the slide effect */
-}
-.nav-icon {
-    width: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #121246cc;
-}
-.nav-item.nav-icon:hover{
-background-color: #2546EA;
-}
-.nav-text {
-  font-size: 1rem;
-  font-weight: 500;
-}
-/*    active state          */
-.nav-item.active {
-  background-color: #2546EA;
-  color: white;           
-  font-weight: 600;
-}
-.nav-item.active .nav-icon {
-  color: white;           
-}
 /*  the logout btn */
 .logout-button {
   margin-top: auto; 
@@ -96,40 +33,14 @@ background-color: #2546EA;
   flex-direction: column;
   height: 100vh;
 }
-.content-header {
-  height: 90px;
-  background-color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 40px;
-  border-bottom: 1px solid #e2e8f0;
-}
 .page-display {
   flex: 1;
   padding: 40px;
-  overflow-y: auto; /* Makes only the content area scrollable */
+  /* overflow-y: auto;  */
 }
-/* Welcome Text */
-.title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #002366; 
-  margin: 0;
-}
-.subtitle {
-  font-size: 0.85rem;
-  color: #64748b;
-  margin: 2px 0 0 0;
-}
-/* Right Side Actions */
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-/* Search Bar Styles */
-.search-bar {
+/* Makes only the content area scrollable */
+/* Search Bar Styles to be used later */
+/* .search-bar {
   display: flex;
   align-items: center;
   background-color: #f1f5f9;
@@ -144,77 +55,4 @@ background-color: #2546EA;
   outline: none;
   font-size: 0.9rem;
   width: 150px;
-}
-/* Notification Btn */
-.icon-btn {
-  background: none;
-  border-radius: 50%;
-  padding: 1%;
-  border: 1px solid #ccc;
-  color: #64748b;
-  cursor: pointer;
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-.notification-dot {
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  width: 8px;
-  height: 8px;
-  background-color: #e11d48; 
-  border-radius: 50%;
-  border: 2px solid white;
-}
-/* User Profile Box */
-.user-profile-box {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding:1.5% 2%;
-  border-radius: 4px;
-  width: 200px;
-  border: 1px solid #e2e8f0;
-}
-.user-info {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  width: 150px;
-}
-.title{
-  text-transform: capitalize;
-}
-.user-name {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #1e293b;
-  text-transform: capitalize;
-}
-
-.user-email {
-  font-size: 0.8rem;
-  color: #64748b;
-}
-
-.profile-pic {
-  width: 42px;
-  height: 42px;
-  background-color: #B0E0E6; 
-  color: #002366;           
-  border-radius: 10px;     
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* styling of the user's intial */
-  font-weight: 700;
-  font-size: 1.2rem;
-  text-transform: uppercase; 
-  border: 2px solid rgba(0, 35, 102, 0.1);
-}
-.icons{
-  width: 20px;
-  height: 20px;
-
-}
+} */

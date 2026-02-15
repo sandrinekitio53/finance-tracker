@@ -4,12 +4,10 @@
   align-items: center;
   margin-bottom: 20px;
 }
-
 .actionButtons {
   display: flex;
   gap: 12px;
 }
-
 .addBtn {
   padding: 8px 20px;
   border-radius: 20px; 
@@ -17,25 +15,30 @@
   font-weight: 600;
   cursor: pointer;
 }
-
 .incomeBtn { 
   background-color: white; 
   color: #3b82f6; 
   border: 1px solid #3b82f6; 
 }
-
 .expenseBtn { 
   background-color: #3b82f6; 
   color: white; 
 }
-
 .filterSection {
   display: flex;
   gap: 15px;
   margin-bottom: 25px;
   flex-wrap: wrap; /* Good for mobile responsiveness */
 }
-
+.dateFilter{
+  gap: 10px;
+  display: flex;
+  justify-content: center;
+}
+.dateFilter input{
+  width: 200px;
+  /* background: #000; */
+}
 .filterDropdown, .filterInput {
   padding: 8px 12px;
   border: 1px solid #e2e8f0;
@@ -44,12 +47,10 @@
   background: white;
 }
 /*  the table stylingssssssssssssss */
-
 .actionsCell {
   display: flex;
   gap: 10px;
 }
-
 .actionBtn {
   background: none;
   border: none;
@@ -59,7 +60,6 @@
   border-radius: 4px;
   transition: background 0.2s;
 }
-
 .actionBtn.edit:hover { background-color: #e0f2fe; color: #3b82f6; }
 .actionBtn.delete:hover { background-color: #fee2e2; color: #ef4444; }
 .statusBadge {
@@ -70,7 +70,6 @@
   background-color: #f1f5f9; 
   color: #64748b;
 }
-
 .statusBadge.complete { background-color: #c6f6d5; color: #2f855a; }
 .statusBadge.failed { background-color: #fed7d7; color: #c53030; }
 .statusBadge.pending { background-color: #fefcbf; color: #b7791f; }
@@ -79,9 +78,12 @@
 .financeTable {
   width: 100%;
   border-collapse: separate;
-  border-spacing: 0 10px; /* Gives that "row" look from your design */
+  border-spacing: 0 15px; /* Gives that "row" look from your design */
 }
-
+thead{
+  width: 100%;
+  background: black;
+}
 .financeTable tr {
   background-color: white;
   box-shadow: 0 2px 4px rgba(0,0,0,0.02);
@@ -103,13 +105,19 @@
   transition: all 0.3s ease-in-out;
   z-index: 1000;
 }
-
 .drawerOverlay.active {
   opacity: 1;
   visibility: visible;
 }
-
 /*  The Actual Drawer Content */
+.drawerHeader{
+  display: flex;
+justify-content: space-between;
+  gap: 10px;
+}
+.drawerHeader h2{
+  font-size: 32px;
+}
 .drawerContent {
   width: 400px;
   height: 100%;
@@ -119,30 +127,43 @@
   transition: transform 0.3s ease-in-out;
   box-shadow: -5px 0 15px rgba(0,0,0,0.1);
 }
-
 .drawerOverlay.active .drawerContent {
   transform: translateX(0); /* Slide into view */
 }
-
 /* Form Styling */
 .drawerForm {
   display: flex;
   flex-direction: column;
   gap: 20px;
   margin-top: 30px;
+ width: 350px;
 }
-
 .formGroup {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-
+.formGroup label{
+  font-size: 24px;
+}
+.formGroup input{
+  height: 2rem;
+ font-size: 1.3rem;
+ border-radius: 3px;
+ padding: 4px;
+}
+.closeButton{
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  font-size: 24px;
+  background: transparent;
+  border: 1px solid #ccc;
+}
 .submitButton.income { background-color: #10b981; color: white; }
 .submitButton.expense { background-color: #3b82f6; color: white; }
 
 /* for the pages at the footer */
-
 .tableFooter {
   display: flex;
   justify-content: space-between;
@@ -152,13 +173,11 @@
   color: #64748b; /* Professional gray */
   font-size: 0.9rem;
 }
-
 .paginationControls {
   display: flex;
   gap: 10px;
   align-items: center;
 }
-
 .paginationControls button {
   background: white;
   border: 1px solid #e2e8f0;
@@ -167,17 +186,14 @@
   cursor: pointer;
   transition: all 0.2s;
 }
-
 .paginationControls button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-
 .paginationControls button:hover:not(:disabled) {
   background: #f8fafc;
   border-color: #cbd5e1;
 }
-
 .pageNumber {
   background: #3b82f6;
   color: white;

@@ -1,7 +1,9 @@
 import React from 'react'
 import './transac.css';
 
+
 const TransacTable = ({transactions, onDelete, onEdit}) => {
+  
 
     if (!transactions || transactions.length === 0) {
     return <div className="no-data">No transactions found.</div>;
@@ -10,8 +12,7 @@ const TransacTable = ({transactions, onDelete, onEdit}) => {
     <div className="tableContainer">
       <table className="financeTable">
         <thead>
-          <tr>
-            <th><input type="checkbox" /></th>
+          <tr className='tableInfo'>
             <th>Date</th>
             <th>Category</th>
             <th>Method</th>
@@ -23,7 +24,8 @@ const TransacTable = ({transactions, onDelete, onEdit}) => {
         <tbody>
           {transactions.map((item) => (
             <tr key={item.id}>
-              <td><input type="checkbox" /></td>
+              <td><input type="radio" /></td> 
+              {/* checkbox shld only be active once being the row is doubled click */}
               <td>{item.date}</td>
               <td>{item.category}</td>
               <td>{item.method}</td>

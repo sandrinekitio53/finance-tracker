@@ -19,14 +19,10 @@ const handleSubmit = async (event) => {
   try {
     const response = await axios.post(LOGIN_API_URL, { email, password });
     
-    // 1. Log the data to see what the backend sent (firstName or first_name?)
+    // see the console output if login is successful firts_name
     console.log('Login successful!', response.data);
-
-    // 2. PASS THE DATA HERE! 
-    // This sends the user object from the backend to App.jsx
+    // get user info stored in backend and send it to the APP.jsx
     onLoginSuccess(response.data); 
-
-    // 3. Navigate to the dashboard
     navigate('/owner/dashboard'); 
 
   } catch (err) {
@@ -62,4 +58,8 @@ const handleSubmit = async (event) => {
 }
 
 export default Login;
+  // 1. Placeholder for authentication state
+  // In a real app, this would be managed by Context/Redux and updated on successful login/logout.
 //  Update the 'password', email  state on every change when using the onchange
+
+  // Function to be called from LoginForm upon successful backend login

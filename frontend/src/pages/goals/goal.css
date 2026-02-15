@@ -1,0 +1,46 @@
+.goalsContainer { padding: 20px; background-color: #f8fafc; min-height: 100vh; }
+
+.goalsHeader { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; position: relative; }
+
+.balanceLabel { color: #64748b; font-size: 0.9rem; }
+.balanceValue { font-size: 1.5rem; font-weight: 700; color: #1e293b; }
+
+.setNewBtn {
+    position: absolute; right: 0; top: 40px;
+    background-color: #3b82f6; color: white;
+    padding: 8px 24px; border-radius: 6px; border: none;
+    font-weight: 600; cursor: pointer;
+}
+
+.goalsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.goalCard {
+    background: white; border-radius: 16px; padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.cardHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.cardHeader h4 { color: #1e293b; font-size: 1.1rem; margin: 0; }
+.cardMenuBtn { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1.2rem; }
+
+.cardMainAmount { font-size: 1.4rem; margin-bottom: 20px; color: #1e293b; }
+
+.progressInfo { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px; }
+.savedInfo { display: flex; flex-direction: column; }
+.savedInfo span { font-size: 0.85rem; font-weight: 600; color: #475569; }
+.savedInfo small { font-size: 0.75rem; color: #64748b; }
+.percentLabel { font-size: 0.85rem; color: #64748b; }
+
+.progressBarBase { width: 100%; height: 6px; background: #f1f5f9; border-radius: 10px; overflow: hidden; }
+.progressBarFill { height: 100%; background: #3b82f6; border-radius: 10px; transition: width 0.3s ease; }
+
+.cardFooterDetails { margin-top: 20px; display: flex; flex-direction: column; gap: 8px; }
+.footerRow { display: flex; justify-content: space-between; align-items: center; }
+.footerLabel { color: #94a3b8; font-size: 0.85rem; }
+.footerValue { font-size: 0.9rem; font-weight: 600; color: #1e293b; }
+
+.remainingPrice { color: #1e293b; } /* Change to red if you want to highlight it */

@@ -1,11 +1,16 @@
-import React, { useMemo, useState } from 'react';
+import React, {useEffect, useMemo, useState } from 'react';
 import TransactionTable from './transacTable';
 import TransactionDrawer from './transacDrawer';
 import './transac.css';
 import {transactionHistory} from '../../assets/assets';
 
 const Transactions = () => {
-const [data, setData] = useState(transactionHistory || []); // Declare data first!
+
+  const [data, setData] = useState(() => {
+    const saved = localStorage.getItem('myTransactions');
+    return saved ? JSON.parse(saved) : (transactionHistory || []);
+  });
+ // Declare data first!
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activeType, setActiveType] = useState('expense');
   const [editingItem, setEditingItem] = useState(null);
@@ -14,10 +19,11 @@ const [data, setData] = useState(transactionHistory || []); // Declare data firs
   const [statusFilter, setStatusFilter] = useState('All');
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [methodFilter, setMethodFilter] = useState('All');
+  
 
   const rowsPerPage = 9;
 
-  // useMemo react hook for the calsulation and memoristion
+  // useMemo react hook mainly for  memorization and may be calculation but has to crosscheck ont that
   const filteredTransactions = useMemo(() => {
     
     return (data || []).filter(item => {
@@ -42,21 +48,59 @@ const [data, setData] = useState(transactionHistory || []); // Declare data firs
     setIsDrawerOpen(true);
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm("Delete this transaction?")) {
-      const updatedData = data.filter(item => item.id !== id);
-      setData(updatedData);
-    }
-  };
+  // Delete from table
+ const handleDelete = (id) => {
+  if (window.confirm("Delete this transaction?")) {
+    // 1. Update the UI screen immediately
+    const updatedData = data.filter(item => String(item.id) !== String(id));
+    setData(updatedData);
 
+    // 2. RECTIFICATION: Update the permanent storage [cite: 2026-02-15]
+    localStorage.setItem('userTransactions', JSON.stringify(updatedData));
+
+    // 3. RECTIFICATION: Tell the Budget page to shrink its bars [cite: 2026-02-15]
+    window.dispatchEvent(new Event("balanceUpdated"));
+    
+    console.log("Transaction removed and Budget notified.");
+  }
+};
+
+  // edit from table 
   const handleEdit = (item) => {
     setEditingItem(item);
     setActiveType(item.type || 'expense'); // Set type based on the item
     setIsDrawerOpen(true);
   };
 
+  const handleSaveTransaction = (updatedFields) => {
+  if (editingItem) {
+    // 1. EDIT MODE: Find the old item and merge the new fields
+    setData((prevData) =>
+      prevData.map((item) =>
+        item.id === editingItem.id ? { ...item, ...updatedFields } : item
+      )
+    );
+  } else {
+    // 2. ADD MODE: Create a completely new entry [cite: 2026-01-09]
+    const newItem = {
+      ...updatedFields,
+      id: Date.now(), // Unique ID generation
+    };
+    setData((prevData) => [newItem, ...prevData]);
+  }
+  
+  // Close and Cleanup
+  setIsDrawerOpen(false);
+  setEditingItem(null);
+};
+
+// 2. Auto-save to LocalStorage whenever 'data' changes [cite: 2026-01-09]
+  useEffect(() => {
+    localStorage.setItem('myTransactions', JSON.stringify(data));
+  }, [data]);
   return (
     <div className="transactionsContainer">
+
       <div className="transactionsHeader">
         <h1 className="pageTitle">Transactions</h1>
         <div className="actionButtons">
@@ -90,42 +134,34 @@ const [data, setData] = useState(transactionHistory || []); // Declare data firs
           <option value="MTN Momo">MTN Momo</option>
           <option value="OM">OM</option>
         </select>
-      </div>
+
         <div className="dateFilter">
-          <input type="text" placeholder="From:" className="filterInput" />
-          <input type="text" placeholder="To:" className="filterInput" />
+          <input type="date" placeholder="From:" className="filterInput" />
+          <input type="date" placeholder="To:" className="filterInput" />
         </div>
-{/*  the tabls section  */}
-      <div className="tableWrapper">
-        <TransactionTable transactions={currentRows} onDelete={handleDelete} 
-        onEdit={handleEdit}/>
+        {/*  absolutely needs to add the from and to as pacholders while keeping the date input type */}
       </div>
-      {/*  the drawer form  */}
-            <TransactionDrawer 
-        isOpen={isDrawerOpen} 
-        type={activeType} 
-        editData={editingItem} // Pass the item to the drawer for editing
-        onClose={() => setIsDrawerOpen(false)} 
+       
+           {/*  the tabls section  */}
+      <div className="tableWrapper">
+        <TransactionTable transactions={currentRows} onDelete={handleDelete} onEdit={handleEdit}/>
+      </div>
+
+         {/*  the drawer form  */}
+      <TransactionDrawer isOpen={isDrawerOpen} type={activeType} onSave ={handleSaveTransaction}
+        editData={editingItem} onClose={() => setIsDrawerOpen(false)} 
+        // Pass the item to the drawer for editing        
       />
+
       <div className="tableFooter">
         <p className="resultsCount">
           {showingCount} Out of {totalResults}
         </p>
         
         <div className="paginationControls">
-          <button 
-            disabled={currentPage === 1} 
-            onClick={() => setCurrentPage(prev => prev - 1)}
-          >
-            Previous
-          </button>
+          <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}> Previous </button>
           <span className="pageNumber">{currentPage}</span>
-          <button 
-            disabled={indexOfLastRow >= totalResults} 
-            onClick={() => setCurrentPage(prev => prev + 1)}
-          >
-            Next
-          </button>
+          <button disabled={indexOfLastRow >= totalResults} onClick={() => setCurrentPage(prev => prev + 1)}> Next</button>
         </div>
       </div>
       

@@ -59,7 +59,6 @@ export const dummyUserData = {
     "image": p2,
 }
 
-// Inside your assets/assets.js
 export const summaryCardDetails = [
   {
     id: "balance",
@@ -94,7 +93,7 @@ export const transactionHistory = [
   },
   {
     id: 2,
-    date: "09/28/25 - 20:45",
+    date: "07/28/25 - 20:45",
     category: "Food",
     method: "Cash in Hand",
     amount: "1500frs",
@@ -102,20 +101,59 @@ export const transactionHistory = [
   },
   {
     id: 3,
-    date: "09/28/25 - 22:45",
+    date: "08/28/25 - 22:45",
     category: "Food",
     method: "Momo",
     amount: "1500frs",
     status: "Pending"
   }
 ];
-// export const ownerPageLinks = [
-//     {name: "Dashboard", path: "/owner", icon:dashboardIcon , coloredIcon:dashboardIconColored},
-//     {name:"Add expense details" , path: "/owner/Edetails"  , icon:expenseicon , coloredIcon: expenseiconColored},
-//     { name:"Transaction history " , path: "/owner/transactions" , icon:transactionIcon , coloredIcon:transactionIconColored},
-//     { name:"Manager Goals" , path: "/owner/manage-goals" , icon:goalsIcon , coloredIcon:goalsIconColored},
 
-// ]
+
+ export const goalData = [
+  { 
+    id: 1, 
+    title: "Wi-Fi Box", 
+    targetAmount: 25000, 
+    savedSoFar: 5000, 
+    targetDate: "03 Feb 2026" 
+  },
+  { 
+    id: 2, 
+    title: "Mum's Birthday", 
+    targetAmount: 25000, 
+    savedSoFar: 3000, 
+    targetDate: "03 Aug 2026" 
+  },
+  { 
+    id: 3, 
+    title: "Defense Expenses", 
+    targetAmount: 25000, 
+    savedSoFar: 7000, 
+    targetDate: "29 March 2026" 
+  },
+  { 
+    id: 4, 
+    title: "Camtel Internet", 
+    targetAmount: 3500, 
+    savedSoFar: 500, 
+    targetDate: "24 Nov 2023" 
+  },
+  { 
+    id: 5, 
+    title: "Anna's Birthday", 
+    targetAmount: 5000, 
+    savedSoFar: 1000, 
+    targetDate: "14 Jan 2026" 
+  },
+  { 
+    id: 6, 
+    title: "Defense Expenses", 
+    targetAmount: 25000, 
+    savedSoFar: 7000, 
+    targetDate: "29 March 2026" 
+  }
+];
 
 // #F2F8FB , #002366, 
 // #2546EA

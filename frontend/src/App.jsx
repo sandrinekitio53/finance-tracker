@@ -1,6 +1,5 @@
-import React from 'react';
-import {Routes, Route, Navigate } from 'react-router-dom';
-
+import React, { useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import Login from './component/authen/login';
 import Signup from './component/authen/SignUp';
@@ -9,60 +8,59 @@ import Budget from './pages/budget/budget';
 import Transactions from './pages/transactions/transaction';
 import Account from './pages/account/account';
 import Analytics from './pages/analytics/analytic';
-import Goals from './pages/goals/goal';
 import Mainlayout from './pages/mainlayout/mainlayout';
-import { useState } from 'react';
-
-
-
+import Goals from './pages/goals/goal';
 
 const App = () => {
-  // 1. Placeholder for authentication state
-  // In a real app, this would be managed by Context/Redux and updated on successful login/logout.
-  const [isAuthenticated, setIsAuthenticated] = React.useState(false); 
+// check the memory first 
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return localStorage.getItem('isLoggedIn') === 'true'; // localstorage is used so as not to go to the login page once the page is refreshed 
+  });
 
-  // Function to be called from LoginForm upon successful backend login
+  const [userData, setUserData] = useState(() => {
+    const savedUser = localStorage.getItem('userData'); // store the user's info and preference 
+    return savedUser ? JSON.parse(savedUser) : {
+      firstName: "",
+      lastName: "",
+      email: "",
+      userInitial: "",
+      profilePic: null
+    };
+  });
+
+  //  SUCCESS HANDLER: Now saves to memory
   const handleLoginSuccess = (data) => {
-    setIsAuthenticated(true);
     const dataWithInitial = {
       ...data,
       userInitial: data.firstName ? data.firstName.charAt(0).toUpperCase() : 'U'
     };
     
+    // Save to LocalStorage so refresh doesn't break it
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('userData', JSON.stringify(dataWithInitial));
+    
+    setIsAuthenticated(true);
     setUserData(dataWithInitial);
-    console.log("Login Data:", data)
+    console.log("Login Success - Data Saved:", dataWithInitial);
   };
   
-  // this one handles the logout and i paased as prop in the sidebar and mainlayout
+  //  LOGOUT HANDLER to Clear the  memory
+   // this one handles the logout and i paased as prop in the sidebar and mainlayout
   const handleLogout = () => {
-    setIsAuthenticated(false);   
-  }
-
-  const [userData, setUserData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    userInitial: "",
-    profilePic: null
-  });
-
-React.useEffect(() => {
-  console.log("--- DATA WATCHER ---");
-  console.log("Current User Data:", userData);
-}, [userData]);
-  
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userData');
+    setIsAuthenticated(false);
+    setUserData({ firstName: "", lastName: "", email: "", userInitial: "", profilePic: null });
+  };
 
   return (
- 
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={isAuthenticated ? (<Navigate to="/owner" replace />) : (<Login onLoginSuccess={handleLoginSuccess} />)}/>
-        <Route path="/signup" element={<Signup onLoginSuccess={handleLoginSuccess} />}/>
+    <Routes>
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      
+      <Route path="/login" element={isAuthenticated ? <Navigate to="/owner/dashboard" replace /> : <Login onLoginSuccess={handleLoginSuccess} />} />
+      <Route path="/signup" element={isAuthenticated ? <Navigate to="/owner/dashboard" replace /> : <Signup onLoginSuccess={handleLoginSuccess} />} />
 
-
-        {/* THE PROTECTED ROUTES SECTION */}
       <Route path="/owner" element={isAuthenticated ? <Mainlayout user={userData} onLogout={handleLogout} /> : <Navigate to="/login" replace />}>
-        {/* These are "Child" routes. They render inside MainLayout's <Outlet /> */}
         <Route path="dashboard" element={<Dashboard user={userData} />} />
         <Route path="transactions" element={<Transactions />} />
         <Route path="budget" element={<Budget />} />
@@ -71,10 +69,8 @@ React.useEffect(() => {
         <Route path="account" element={<Account />} />
       </Route>
         
-        {/* Catch-all route for 404s */}
-        <Route path="*" element={<h1>404 - Page Not Found</h1>} />
-      </Routes>
-   
+      <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+    </Routes>
   );
 };
 

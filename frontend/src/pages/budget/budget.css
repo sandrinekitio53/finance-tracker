@@ -1,0 +1,175 @@
+/* Container and Layout */
+.budgetContainer {
+  padding: 30px;
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+.budgetHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.budgetHeader h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.budgetHeader p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Add Button Styling */
+.addBudgetBtn {
+  background-color: #2D31FA;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.addBudgetBtn:hover {
+  background-color: #1e21d3;
+  transform: translateY(-2px);
+}
+
+/* Global Summary Card (Dark Theme) */
+.overallSummaryCard {
+  background: #1A1A1A; /* Prep for future Dark Mode [cite: 2025-12-18] */
+  color: white;
+  padding: 30px;
+  border-radius: 20px;
+  margin-bottom: 40px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.summaryInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 25px;
+}
+
+.summaryInfo span {
+  color: #94a3b8;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summaryInfo h2 {
+  font-size: 32px;
+  margin: 10px 0;
+}
+
+.spendingStatusText {
+  color: #cbd5e1;
+  font-size: 15px;
+  margin: 0;
+}
+
+.usageBadge {
+  background: #2D31FA;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.globalProgressBarBase {
+  height: 10px;
+  background: #334155;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.globalProgressBarFill {
+  height: 100%;
+  background: #2D31FA;
+  border-radius: 5px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Individual Budget Cards Grid */
+.budgetGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+}
+
+.budgetCard {
+  background: white;
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  transition: box-shadow 0.3s;
+}
+
+.budgetCard:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.budgetInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.categoryName {
+  font-weight: 700;
+  font-size: 18px;
+  color: #1e293b;
+}
+
+.amountRatio {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.amountRatio strong {
+  color: #1e293b;
+  font-size: 15px;
+}
+
+/* Card Progress Bars */
+.progressBarBase {
+  height: 12px;
+  background: #f1f5f9;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.progressBarFill {
+  height: 100%;
+  background: #2D31FA;
+  transition: width 0.5s ease-in-out;
+}
+
+.progressBarFill.danger {
+  background: #D9363E; /* Red alert for overspending [cite: 2026-01-09] */
+}
+
+.budgetFooter {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.remainingText {
+  color: #64748b;
+}
+
+.percentLabel {
+  color: #2D31FA;
+  font-weight: 700;
+}
