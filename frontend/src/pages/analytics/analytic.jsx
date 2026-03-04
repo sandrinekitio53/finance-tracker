@@ -1,82 +1,102 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
 import { 
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, 
-  PieChart, Pie, AreaChart, Area, CartesianGrid 
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, ScatterChart, Scatter, ZAxis,
+  PieChart, Pie, AreaChart, Area, CartesianGrid, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from 'recharts';
 import './analytic.css';
 
-const Analytics = () => {
-  // --- STATE MANAGEMENT ---
+// Pass the user object as a prop to get the user_id [cite: 2026-02-16]
+const Analytics = ({ user }) => {
   const [analyticsData, setAnalyticsData] = useState([]);
   const [activeChartType, setActiveChartType] = useState('bar'); 
   const [summaryStats, setSummaryStats] = useState({ income: 0, expenses: 0, savings: 0 });
   const [topCategory, setTopCategory] = useState({ name: '', value: 0, percentage: 0 });
+  const [isLoading, setIsLoading] = useState(true);
 
-  // UI Brand Colors
-  const COLORS = ['#D9363E', '#2D31FA', '#1A1A1A', '#B35AB3'];
-
-  // --- LOGIC ENGINE ---
-  const refreshAnalytics = () => {
-    const rawData = localStorage.getItem('userTransactions');
+  const COLORS = ['#D9363E', '#2D31FA', '#1A1A1A', '#B35AB3', '#8B5CF6'];
+  const fetchAnalyticsFromDb = useCallback(async () => {
+    if (!user?.id) return;
+    setIsLoading(true);
     
-    if (rawData) {
-      const transactions = JSON.parse(rawData);
+    try {
+
+      const response = await axios.get(`http://localhost:8081/api-transactions/${user.id}`, { withCredentials: true });
+      const transactions = response.data;
       
-      // 1. Filter and Calculate Totals
-      const expenseList = transactions.filter(t => t.type === 'expense');
-      const totalIncome = transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + Number(t.amount), 0);
-      const totalExpenses = expenseList.reduce((acc, t) => acc + Number(t.amount), 0);
+      if (transactions && transactions.length > 0) {
+        // Filter and calc totals using DB data
+        const expenseList = transactions.filter(t => t.type === 'expense');
+        const incomeList = transactions.filter(t => t.type === 'income');
+        
+        const totalIncome = incomeList.reduce((acc, t) => acc + Number(t.amount), 0);
+        const totalExpenses = expenseList.reduce((acc, t) => acc + Number(t.amount), 0);
 
-      // 2. Group by Category
-      const categoryMap = {};
-      expenseList.forEach(t => {
-        const cat = t.category || "Other";
-        categoryMap[cat] = (categoryMap[cat] || 0) + Number(t.amount);
-      });
+        // Group by category for charts
+        const categoryMap = {};
+        expenseList.forEach(t => {
+          const cat = t.category || "Other";
+          categoryMap[cat] = (categoryMap[cat] || 0) + Number(t.amount);
+        });
 
-      // 3. Format & Sort (Biggest first for the list) 
-      const formatted = Object.keys(categoryMap).map(cat => ({
-        name: cat,
-        value: categoryMap[cat],
-        percentage: totalExpenses > 0 ? Math.round((categoryMap[cat] / totalExpenses) * 100) : 0
-      })).sort((a, b) => b.value - a.value);
+        const formatted = Object.keys(categoryMap).map(cat => ({
+          name: cat,
+          value: categoryMap[cat],
+          percentage: totalExpenses > 0 ? Math.round((categoryMap[cat] / totalExpenses) * 100) : 0
+        })).sort((a, b) => b.value - a.value);
 
-      setAnalyticsData(formatted);
-      setSummaryStats({
-        income: totalIncome,
-        expenses: totalExpenses,
-        savings: totalIncome - totalExpenses
-      });
+        setAnalyticsData(formatted);
+        setSummaryStats({
+          income: totalIncome,
+          expenses: totalExpenses,
+          savings: totalIncome - totalExpenses
+        });
 
-      // 4. Set Smart Insight (The largest expense) 
-      if (formatted.length > 0) {
-        setTopCategory(formatted[0]);
+        if (formatted.length > 0) {
+          setTopCategory(formatted[0]);
+        }
       }
+    } catch (error) {
+      console.error("❌ Analytics DB Fetch Error:", error);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [user?.id]);
 
   useEffect(() => {
-    refreshAnalytics();
-    // Listen for updates from other parts of the app 
-    window.addEventListener('balanceUpdated', refreshAnalytics);
-    window.addEventListener('storage', refreshAnalytics);
-    return () => {
-      window.removeEventListener('balanceUpdated', refreshAnalytics);
-      window.removeEventListener('storage', refreshAnalytics);
-    };
-  }, []);
+    fetchAnalyticsFromDb();
+    
+    // Listen for global updates (like when you save in the Drawer) 
+    window.addEventListener('balanceUpdated', fetchAnalyticsFromDb);
+    return () => window.removeEventListener('balanceUpdated', fetchAnalyticsFromDb);
+  }, [fetchAnalyticsFromDb]);
 
-  // --- CHART RENDERER ---
+  // Custom Tooltip component for a youthful vibe
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip-vibe">
+          <p className="label">{`${payload[0].payload.name || payload[0].name}`}</p>
+          <p className="value">{`${payload[0].value.toLocaleString()} FCFA`}</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   const renderChart = () => {
-    if (analyticsData.length === 0) return <div className="emptyState">No transaction data yet.</div>;
+    if (isLoading) return <div className="emptyState">Syncing with database...</div>;
+    if (analyticsData.length === 0) return <div className="emptyState">No transaction data found in DB.</div>;
 
     switch (activeChartType) {
       case 'bar':
         return (
           <BarChart data={analyticsData}>
-            <XAxis dataKey="name" axisLine={false} tickLine={false} hide />
-            <Tooltip cursor={{fill: 'transparent'}} />
-            <Bar dataKey="value" radius={[6, 6, 0, 0]} barSize={45}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
+            <YAxis hide />
+            <Tooltip content={<CustomTooltip />} cursor={{fill: '#f8fafc'}} />
+            <Bar dataKey="value" radius={[10, 10, 0, 0]} barSize={40}>
               {analyticsData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
@@ -86,22 +106,62 @@ const Analytics = () => {
       case 'pie':
         return (
           <PieChart>
-            <Pie data={analyticsData} dataKey="value" cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={5}>
+            <Pie 
+              data={analyticsData} 
+              dataKey="value" 
+              cx="50%" cy="50%" 
+              innerRadius={0} 
+              outerRadius={110} 
+              paddingAngle={2} 
+              labelLine={false}
+              stroke="none"
+            >
               {analyticsData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} style={{ filter: 'drop-shadow(0px 4px 6px rgba(0,0,0,0.1))' }} />
               ))}
             </Pie>
-            <Tooltip />
+            <Tooltip content={<CustomTooltip />} />
           </PieChart>
         );
       case 'area':
         return (
           <AreaChart data={analyticsData}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
-            <XAxis dataKey="name" />
-            <Tooltip />
-            <Area type="monotone" dataKey="value" stroke="#2D31FA" fill="#2D31FA33" strokeWidth={3} />
+            <defs>
+              <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#2D31FA" stopOpacity={0.3}/>
+                <stop offset="95%" stopColor="#2D31FA" stopOpacity={0}/>
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+            <XAxis dataKey="name" axisLine={false} tickLine={false} />
+            <Tooltip content={<CustomTooltip />} />
+            <Area type="monotone" dataKey="value" stroke="#2D31FA" strokeWidth={4} fillOpacity={1} fill="url(#colorValue)" />
           </AreaChart>
+        );
+      case 'radar':
+        return (
+          <RadarChart cx="50%" cy="50%" outerRadius="80%" data={analyticsData}>
+            <PolarGrid stroke="#e2e8f0" />
+            <PolarAngleAxis dataKey="name" tick={{ fill: '#64748b', fontSize: 12 }} />
+            <PolarRadiusAxis angle={30} domain={[0, 'auto']} hide />
+            <Radar name="Expenses" dataKey="value" stroke="#2D31FA" fill="#2D31FA" fillOpacity={0.5} />
+            <Tooltip content={<CustomTooltip />} />
+          </RadarChart>
+        );
+      case 'scatter':
+        return (
+          <ScatterChart data={analyticsData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis dataKey="value" unit="fcfa" />
+            <ZAxis type="number" range={[64, 144]} />
+            <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<CustomTooltip />} />
+            <Scatter name="Expenses" data={analyticsData}>
+              {analyticsData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Scatter>
+          </ScatterChart>
         );
       default: return null;
     }
@@ -112,33 +172,36 @@ const Analytics = () => {
       <header className="analyticsHeader">
         <h1>Analytics</h1>
         <div className="chartSwitcher">
-          <button onClick={() => setActiveChartType('bar')} className={activeChartType === 'bar' ? 'active' : ''}>Bar</button>
-          <button onClick={() => setActiveChartType('pie')} className={activeChartType === 'pie' ? 'active' : ''}>Pie</button>
-          <button onClick={() => setActiveChartType('area')} className={activeChartType === 'area' ? 'active' : ''}>Trend</button>
+          {['bar', 'pie', 'area', 'radar', 'scatter'].map((type) => (
+            <button 
+              key={type}
+              onClick={() => setActiveChartType(type)} 
+              className={activeChartType === type ? 'active' : ''}
+            >
+              {type.charAt(0).toUpperCase() + type.slice(1)}
+            </button>
+          ))}
         </div>
       </header>
 
-      {/* Top Cards Section */}
       <section className="statsGrid">
         <div className="statCard">
-          <label>Income <span className="period">Monthly</span></label>
-          <h3>{summaryStats.income.toLocaleString()}fcfa</h3>
+          <label>Income <span className="period">Total</span></label>
+          <h3>{summaryStats.income.toLocaleString()} FCFA</h3>
         </div>
         <div className="statCard">
-          <label>Expenses <span className="period">Monthly</span></label>
-          <h3>{summaryStats.expenses.toLocaleString()}fcfa</h3>
+          <label>Expenses <span className="period">Total</span></label>
+          <h3>{summaryStats.expenses.toLocaleString()} FCFA</h3>
         </div>
         <div className="statCard highlight">
-          <label>Saving Rate</label>
-          <h3>{summaryStats.savings.toLocaleString()}fcfa</h3>
+          <label>Savings</label>
+          <h3>{summaryStats.savings.toLocaleString()} FCFA</h3>
         </div>
       </section>
 
-      {/* Main Charts & Categories Section */}
-      
       <section className="mainVisualSection">
         <div className="chartBox">
-          <h3>Expenses Breakdown</h3>
+          <h3>Expense Distribution</h3>
           <div className="chartHarness">
             <ResponsiveContainer width="100%" height="100%">
               {renderChart()}
@@ -159,19 +222,16 @@ const Analytics = () => {
           </div>
         </div>
       </section>
-
-      {/* Smart Insights Section [cite: 2026-01-09] */}
+      
       <section className="insightsBox">
         <h3>Spending Insights</h3>
         {topCategory.name ? (
           <div className="insightCard">
-            <h4>{topCategory.name} costs are your largest expenses</h4>
-            <p>This month you have spent more on {topCategory.name} ({topCategory.percentage}% of total expenses).</p>
+            <h4>{topCategory.name} is your biggest expense</h4>
+            <p>This category accounts for {topCategory.percentage}% of your total spending. Consider reviewing your {topCategory.name} habits!</p>
           </div>
         ) : (
-          <div className="insightCard">
-            <p>Add some expenses to generate smart insights!</p>
-          </div>
+          <div className="insightCard"><p>Start tracking to see insights.</p></div>
         )}
       </section>
     </div>

@@ -18,10 +18,7 @@ const handleSubmit = async (event) => {
 
   try {
     const response = await axios.post(LOGIN_API_URL, { email, password });
-    
-    // see the console output if login is successful firts_name
     console.log('Login successful!', response.data);
-    // get user info stored in backend and send it to the APP.jsx
     onLoginSuccess(response.data); 
     navigate('/owner/dashboard'); 
 

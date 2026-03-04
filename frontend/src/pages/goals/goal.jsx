@@ -1,137 +1,170 @@
-import React, { useState, useEffect } from 'react';
-import GoalDrawer from './goalDrawer'; // Ensure the filename is exactly GoalDrawer.jsx
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
+import { Target, Trash2, Edit3, MoreVertical, X } from 'lucide-react'; 
+import GoalDrawer from './goalDrawer'; 
 import './goal.css';
 
-const Goals = () => {
-  const [goalsList, setGoalsList] = useState(() => {
-    const saved = localStorage.getItem('userSavingsGoals');
-    return saved ? JSON.parse(saved) : [];
-  });
+const Goals = ({ userId }) => {
+    // --- State Management ---
+    const [goalsList, setGoalsList] = useState([]);
+    const [availableBalance, setAvailableBalance] = useState(0);
+    const [showGoalModal, setShowGoalModal] = useState(false);
+    const [editingGoal, setEditingGoal] = useState(null); 
+    const [activeMenu, setActiveMenu] = useState(null); 
 
-const [availableBalance, setAvailableBalance] = useState(0);
+    // --- Data Fetching Logic (XAMPP Sync) ---
+    const fetchGoalsData = useCallback(async () => {
+        if (!userId) return;
+        try {
+            const response = await axios.get(`http://localhost:8081/api-goals/${userId}`);
+            setGoalsList(response.data);
+        } catch (error) {
+            console.error("Error fetching goals:", error);
+        }
+    }, [userId]);
 
-  // RECTIFICATION: A reusable function to calculate the REAL balance
-  const calculateLiveBalance = () => {
-    // IMPORTANT: Check your Transaction Drawer code to see the EXACT key name used
-    const savedData = localStorage.getItem('userTransactions'); 
-    
-    if (savedData) {
-      const transactions = JSON.parse(savedData);
-      const total = transactions.reduce((acc, item) => {
-        // Ensure naming matches your Transaction object (amount vs price)
-        const amt = Number(item.amount || item.price || 0);
-        return item.type === 'income' ? acc + amt : acc - amt;
-      }, 0);
-      setAvailableBalance(total);
-    } else {
-      setAvailableBalance(117500); // Fallback
-    }
-  };
+    const calculateLiveBalance = useCallback(async () => {
+        if (!userId) return;
+        try {
+            const response = await axios.get(`http://localhost:8081/api-transactions/${userId}`);
+            const transactions = response.data;
+            const total = transactions.reduce((acc, item) => {
+                const amt = Number(item.amount);
+                return item.type === 'income' ? acc + amt : acc - amt;
+            }, 0);
+            setAvailableBalance(total);
+        } catch (error) {
+            console.error("Balance Sync Error:", error);
+        }
+    }, [userId]);
 
-  // Unique state name to avoid conflicts with other drawers
-  const [showGoalModal, setShowGoalModal] = useState(false);
-
-  useEffect(() => {
-    localStorage.setItem('userSavingsGoals', JSON.stringify(goalsList));
-  }, [goalsList]);
-
-  // Load balance on mount
-  useEffect(() => {
-    calculateLiveBalance();
-    // Listen for the signal from TransactionDrawer
-    window.addEventListener('balanceUpdated', calculateLiveBalance);
-    // Listen for changes from other tabs
-    window.addEventListener('storage', calculateLiveBalance);
-    
-  return () =>{
-      window.removeEventListener('balanceUpdated', calculateLiveBalance);
-      window.removeEventListener('storage', calculateLiveBalance);
-  }    
-  }, []);
-
-  const handleSaveGoal = (data) => {
-    const newGoal = {
-      id: Date.now(),
-      title: data.title,
-      targetAmount: data.amount,
-      currentSaved: data.saved,
-      targetDate: data.date
+    // --- Action Handlers ---
+    const handleEditClick = (goal) => {
+        setEditingGoal(goal);
+        setShowGoalModal(true);
+        setActiveMenu(null); // Close the menu after clicking 
     };
-    setGoalsList((prev) => [...prev, newGoal]);
-    calculateLiveBalance();
-    setShowGoalModal(false);
-  };
 
-  return (
-    <div className="goalsContainer">
-      <GoalDrawer 
-        isOpen={showGoalModal} 
-        onClose={() => setShowGoalModal(false)} 
-        onSave={handleSaveGoal} 
-      />
+    const handleDeleteGoal = async (goalId) => {
+        if (!window.confirm("Move this goal to the archives (Delete)?")) return;
+        try {
+            await axios.delete(`http://localhost:8081/api-goals/delete/${goalId}`);
+            fetchGoalsData(); 
+        } catch (error) {
+            console.error("Delete failed:", error);
+        }
+    };
 
-      <div className="goalsHeader">
-        <div className="headerText">
-          <h1>Goals</h1>
-          <p>Track your savings targets</p>
-        </div>
+    const handleCloseModal = () => {
+        setShowGoalModal(false);
+        setEditingGoal(null); 
+    };
+
+    useEffect(() => {
+        fetchGoalsData();
+        calculateLiveBalance();
         
-        <div className="balanceSection">
-          <span className="balanceLabel">Available Balance</span>
-          <h2 className="balanceValue">{availableBalance.toLocaleString()}frs</h2>
-        </div>
+        window.addEventListener('balanceUpdated', calculateLiveBalance);
+        return () => window.removeEventListener('balanceUpdated', calculateLiveBalance);
+    }, [userId, fetchGoalsData, calculateLiveBalance]);
 
-        <button 
-          className="setNewBtn" 
-          onClick={() => {
-            console.log("Set New button clicked!"); // Check your console (F12) for this
-            setShowGoalModal(true);
-          }}
-        >
-          Set New
-        </button>
-      </div>
+    return (
+        <div className="goalsContainer">
+            {/* The Unified Modal for Adding & Editing  */}
+            <GoalDrawer 
+                isOpen={showGoalModal} 
+                onClose={handleCloseModal} 
+                onSave={fetchGoalsData} 
+                userId={userId}
+                initialData={editingGoal} 
+            />
 
-      <div className="goalsGrid">
-        {goalsList.map((goal) => {
-          const remaining = goal.targetAmount - goal.currentSaved;
-          const progressPercent = Math.min(Math.round((goal.currentSaved / goal.targetAmount) * 100), 100);
+            <div className="goalsHeader">
+                <div className="headerText">
+                    <h1>Goals</h1>
+                    <p>Track your savings targets</p>
+                </div>
+                
+                <div className="balanceSection">
+                    <span className="balanceLabel">Available Balance</span>
+                    <h2 className="balanceValue">{availableBalance.toLocaleString()} <small>FCFA</small></h2>
+                </div>
 
-          return (
-            <div key={goal.id} className="goalCard">
-              <div className="cardHeader">
-                <h4>{goal.title}</h4>
-                <button className="cardMenuBtn">&#8942;</button>
-              </div>
-              <h3 className="cardMainAmount">{goal.targetAmount.toLocaleString()}frs</h3>
-              <div className="progressContainer">
-                <div className="progressInfo">
-                    <div className="savedInfo">
-                        <span>{goal.currentSaved.toLocaleString()}frs</span>
-                        <small>Saved</small>
-                    </div>
-                    <span>{progressPercent}%</span>
-                </div>
-                <div className="progressBarBase">
-                  <div className="progressBarFill" style={{ width: `${progressPercent}%` }}></div>
-                </div>
-              </div>
-              <div className="cardFooterDetails">
-                <div className="footerRow">
-                    <span>Target</span>
-                    <span>{goal.targetDate}</span>
-                </div>
-                <div className="footerRow">
-                    <span>Remaining</span>
-                    <span>{remaining.toLocaleString()}frs</span>
-                </div>
-              </div>
+                <button className="setNewBtn" onClick={() => setShowGoalModal(true)}>
+                    <Target size={18} /> Set New
+                </button>
             </div>
-          );
-        })}
-      </div>
-    </div>
-  );
+
+            <div className="goalsGrid">
+                {goalsList.map((goal) => {
+                    const target = Number(goal.target_amount || 0);
+                    const saved = Number(goal.current_saved || 0);
+                    const remaining = target - saved;
+                    const progressPercent = Math.min(Math.round((saved / target) * 100), 100);
+
+                    return (
+                        <div key={goal.id} className="goalCard">
+                            <div className="cardHeader">
+                                <h4>{goal.title || goal.goal_name}</h4>
+                                <div className="menuWrapper">
+                                    <button 
+                                        className="cardMenuBtn" 
+                                        onClick={() => setActiveMenu(activeMenu === goal.id ? null : goal.id)}
+                                    >
+                                        <MoreVertical size={18} />
+                                    </button>
+                                    
+                                    {activeMenu === goal.id && (
+                                        <div className="actionDropdown">
+                                            <button onClick={() => handleEditClick(goal)}>
+                                                <Edit3 size={14} /> Edit
+                                            </button>
+                                            <button className="deleteOption" onClick={() => handleDeleteGoal(goal.id)}>
+                                                <Trash2 size={14} /> Delete
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <h3 className="cardMainAmount">{target.toLocaleString()} <small>FCFA</small></h3>
+                            
+                            <div className="progressContainer">
+                                <div className="progressInfo">
+                                    <div className="savedInfo">
+                                        <span>{saved.toLocaleString()} FCFA</span>
+                                        <small>Saved</small>
+                                    </div>
+                                    <span className="percentLabel">{progressPercent}%</span>
+                                </div>
+                                <div className="progressBarBase">
+                                    <div 
+                                        className="progressBarFill" 
+                                        style={{ width: `${progressPercent}%`, background: progressPercent >= 100 ? '#10b981' : '#2D31FA' }}
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <div className="cardFooterDetails">
+                                <div className="footerRow">
+                                    <span>Target Date</span>
+                                    <span>{new Date(goal.target_date).toLocaleDateString()}</span>
+                                </div>
+                                <div className="footerRow">
+                                    <span>Remaining</span>
+                                    <span className={remaining <= 0 ? "successText" : ""}>
+                                        {remaining <= 0 ? "Goal Met!" : `${remaining.toLocaleString()} FCFA`}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
 };
 
 export default Goals;
+// console.log is used to show the logic goes perfectly well cause i had issues with the gaolDrawer
+// code due to the fact that it wasnot showing bcs it was overshadowed by css and the naming conflict😞

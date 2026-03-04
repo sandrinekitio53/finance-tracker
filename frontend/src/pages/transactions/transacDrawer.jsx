@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios"; 
 import "./transac.css";
 
-/**
- * AI Version: TransactionDrawer
- * Purpose: Handles both creation and editing of transactions with 
- * automatic synchronization to the Budget and Analytics modules.
- */
-const TransactionDrawer = ({ isOpen, onClose, type, editData, onSave }) => {
+const TransactionDrawer = ({ isOpen, onClose, type, editData, onSave, userId }) => {
+
   const [formData, setFormData] = useState({
     transactionDate: new Date().toISOString().slice(0, 16),
     category: "",
@@ -15,7 +12,6 @@ const TransactionDrawer = ({ isOpen, onClose, type, editData, onSave }) => {
     status: "Complete",
   });
 
-  // Predefined categories to help the user match Budget limits
   const categorySuggestions = type === "income"
     ? ["Salary", "Gift", "Business", "Freelance"]
     : ["Transport", "Food", "Internet", "Rent", "Photocopies", "Shopping"];
@@ -23,7 +19,6 @@ const TransactionDrawer = ({ isOpen, onClose, type, editData, onSave }) => {
   const methodSuggestions = ["Cash in Hand", "MTN Momo", "Orange Money", "Bank Card"];
   const statusSuggestions = ["Complete", "Pending", "Failed"];
 
-  // Effect: Load data for editing or reset for new entries
   useEffect(() => {
     if (editData) {
       setFormData({
@@ -36,7 +31,7 @@ const TransactionDrawer = ({ isOpen, onClose, type, editData, onSave }) => {
     } else {
       setFormData({
         transactionDate: new Date().toISOString().slice(0, 16),
-        category: categorySuggestions[0], // Default to first suggestion
+        category: categorySuggestions[0],
         paymentMethod: methodSuggestions[0],
         amount: "",
         status: "Complete",
@@ -49,44 +44,39 @@ const TransactionDrawer = ({ isOpen, onClose, type, editData, onSave }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  /**
-   * RECTIFICATION: Form Submission Logic
-   * Ensures data is formatted correctly for the Budget calculation engine.
-   */
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const finalData = {
-      id: editData ? editData.id : Date.now(),
-      date: formData.transactionDate,
-      category: formData.category.trim(), // Trim to prevent matching errors
-      method: formData.paymentMethod,
-      amount: Number(formData.amount),
-      status: formData.status,
-      type: type, // 'income' or 'expense'
-    };
-
-    const existingTransactions = JSON.parse(localStorage.getItem("userTransactions") || "[]");
-
-    let updatedTransactions;
-    if (editData) {
-      updatedTransactions = existingTransactions.map((t) =>
-        t.id === editData.id ? finalData : t
-      );
-    } else {
-      updatedTransactions = [finalData, ...existingTransactions];
-    }
-
-    localStorage.setItem("userTransactions", JSON.stringify(updatedTransactions));
-
-    // RECTIFICATION: Global Event Trigger
-    // This wakes up the 'Budget' and 'Analytics' pages to show the new data.
-    window.dispatchEvent(new Event("balanceUpdated"));
-
-    if (onSave) onSave(finalData);
-    onClose();
+  const finalData = {
+   user_id: userId, 
+    title: formData.category || "New Transaction", 
+    amount: Number(formData.amount) || 0,
+    type: type, 
+    category: formData.category || null,
+    status: formData.status || 'Complete',
+    method: formData.paymentMethod || null,
+    date: formData.transactionDate || new Date().toISOString().slice(0, 19).replace('T', ' ')
   };
 
+  try {
+    const url = editData 
+      ? `http://localhost:8081/api-update-transaction/${editData.id}` 
+      : `http://localhost:8081/api-add-transaction`;
+
+    const response = editData 
+      ? await axios.put(url, finalData, { withCredentials: true }) 
+      : await axios.post(url, finalData, { withCredentials: true });
+
+    if (response.status === 200 || response.status === 201) {
+     const updateEvent = new CustomEvent("balanceUpdated", { detail: finalData });
+    window.dispatchEvent(updateEvent);
+      if (onSave) onSave();
+      onClose();
+    }
+  } catch (error) {
+    console.error("Database Sync Error:", error.response?.data);
+  }
+};
   if (!isOpen) return null;
 
   return (
@@ -100,70 +90,35 @@ const TransactionDrawer = ({ isOpen, onClose, type, editData, onSave }) => {
         <form onSubmit={handleSubmit} className="drawerForm">
           <div className="formGroup formAmt">
             <label>Amount (frs)</label>
-            <input
-              name="amount"
-              type="number"
-              placeholder="0.00"
-              value={formData.amount}
-              onChange={handleInputChange}
-              required
-            />
+            <input name="amount" type="number" placeholder="0.00" value={formData.amount} onChange={handleInputChange} required />
           </div>
 
           <div className="formGroup">
             <label>Date & Time</label>
-            <input
-              name="transactionDate"
-              type="datetime-local"
-              value={formData.transactionDate}
-              onChange={handleInputChange}
-            />
+            <input name="transactionDate" type="datetime-local" value={formData.transactionDate} onChange={handleInputChange} />
           </div>
 
           <div className="formGroup">
             <label>Category</label>
-            <input
-              name="category"
-              list="categoryOptions"
-              value={formData.category}
-              onChange={handleInputChange}
-              autoComplete="off"
-              placeholder="Select or type category"
-            />
+            <input name="category" list="categoryOptions" value={formData.category} onChange={handleInputChange} autoComplete="off" />
             <datalist id="categoryOptions">
-              {categorySuggestions.map((cat) => (
-                <option key={cat} value={cat} />
-              ))}
+              {categorySuggestions.map((cat) => <option key={cat} value={cat} />)}
             </datalist>
           </div>
 
           <div className="formGroup">
             <label>Method</label>
-            <input
-              name="paymentMethod"
-              list="methodOptions"
-              value={formData.paymentMethod}
-              onChange={handleInputChange}
-            />
+            <input name="paymentMethod" list="methodOptions" value={formData.paymentMethod} onChange={handleInputChange} />
             <datalist id="methodOptions">
-              {methodSuggestions.map((met) => (
-                <option key={met} value={met} />
-              ))}
+              {methodSuggestions.map((met) => <option key={met} value={met} />)}
             </datalist>
           </div>
 
           <div className="formGroup">
             <label>Status</label>
-            <input
-              name="status"
-              list="statusOptions"
-              value={formData.status}
-              onChange={handleInputChange}
-            />
+            <input name="status" list="statusOptions" value={formData.status} onChange={handleInputChange} />
             <datalist id="statusOptions">
-              {statusSuggestions.map((stat) => (
-                <option key={stat} value={stat} />
-              ))}
+              {statusSuggestions.map((stat) => <option key={stat} value={stat} />)}
             </datalist>
           </div>
 
@@ -177,4 +132,10 @@ const TransactionDrawer = ({ isOpen, onClose, type, editData, onSave }) => {
 };
 
 export default TransactionDrawer;
-// window.dispatchEvent; Shout to the app that the balance has changed!
+// Axios is for sql communication
+// + window.dispatchEvent; Shout to the app that the balance has changed!
+// + slice(start, end )is a safe method that returns a shallow copy ie keps a copy of the adat wout iinterfering with that o the transactionHistory
+// so slice(0,16) is to show just the 1st 16 ids the rest goes to the next page 
+// + spread operator  is letting all the data spread out so they can join and form an new set of data 
+//  - it is all abt combining . if u have a list of old transactions and u get a new one , u "spread " the old ones into a new list
+// [newTransaction, ...oldTransaction] meaning put the new elt 1st , then everyone follows

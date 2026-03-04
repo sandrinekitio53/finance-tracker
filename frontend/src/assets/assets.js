@@ -1,5 +1,5 @@
 import p1 from '../assets/1.jpg';
-import p2 from '../assets/download.jpg';
+// import p2 from '../assets/download.jpg';
 // import bg1 from '../assets/download(1).jpeg';
 // import bg2 from '../assets/download(2).jpeg';
 import { 
@@ -14,13 +14,14 @@ import {
   Search,       
   UserCog,
   UserRound,
-  Calendar,
+  Calendar, Mail, Phone, MapPin,
   ArrowUp,
   ArrowDown
 } from 'lucide-react';
 
 export const assets = {
-    p1,p2
+  p1
+    // p1,p2
     // , bg2, bg1
 }
 
@@ -56,7 +57,7 @@ export const dummyUserData = {
     "name": "Jennifer",
     "email": "JDcars@gmail.com",
     "role": "owner",
-    "image": p2,
+    "image": p1,
 }
 
 export const summaryCardDetails = [
@@ -154,6 +155,95 @@ export const transactionHistory = [
     targetDate: "29 March 2026" 
   }
 ];
+export const CATEGORIES = [
+  { value: 'food', label: 'Food & Dining' },
+  { value: 'transport', label: 'Transport' },
+  { value: 'rent', label: 'Rent & Utilities' },
+  { value: 'shopping', label: 'Shopping' },
+  { value: 'entertainment', label: 'Fun & Vibes' },
+  { value: 'health', label: 'Health' },
+  { value: 'other', label: 'Other' }
+];
+export const testimonialData = [
+  {
+    id: 1,
+    initials: "JD",
+    name: "Jean-Paul D.",
+    rating: 5,
+    theme: "indigo",
+    image: "/assets/testimonials/user1.jpg", 
+    body: "Finally, an app that understands FCFA! It’s the first time I’ve actually felt in control of my monthly business spending."
+  },
+  {
+    id: 2,
+    initials: "SA",
+    name: "Sarah A.",
+    rating: 5,
+    theme: "pink",
+    image: null, 
+    body: "The interface is so smooth. Tracking my student allowance used to be a hassle, but now it’s my favorite daily habit."
+  },
+  {
+    id: 2,
+    initials: "SA",
+    name: "Sarah A.",
+    rating: 5,
+    theme: "pink",
+    image: null, 
+    body: "The interface is so smooth. Tracking my student allowance used to be a hassle, but now it’s my favorite daily habit."
+  },
+  {
+    id: 2,
+    initials: "SA",
+    name: "Sarah A.",
+    rating: 5,
+    theme: "pink",
+    image: null, 
+    body: "The interface is so smooth. Tracking my student allowance used to be a hassle, but now it’s my favorite daily habit."
+  },
+];
+
+export const contactDetails = [
+  {
+    id: 1,
+    icon: Mail,
+    label: "Email Us",
+    value: "support@finguard.africa",
+    color: "#4f46e5"
+  },
+  {
+    id: 2,
+    icon: Phone,
+    label: "Call/WhatsApp",
+    value: "+237 6XX XX XX XX",
+    color: "#10b981"
+  },
+  {
+    id: 3,
+    icon: MapPin,
+    label: "Location",
+    value: "Yaoundé, Cameroon",
+    color: "#f59e0b"
+  }
+];
+export const footerLinks = {
+  product: [
+    { name: "Features", href: "#features" },
+    { name: "Vault Overview", href: "#overview" },
+    { name: "Testimonials", href: "#testimonials" }
+  ],
+  company: [
+    { name: "About FinGuard", href: "#" },
+    { name: "Privacy Policy", href: "#" },
+    { name: "Terms of Service", href: "#" }
+  ],
+  social: [
+    { name: "Twitter", href: "#" },
+    { name: "LinkedIn", href: "#" },
+    { name: "Instagram", href: "#" }
+  ]
+};
+
 
 // #F2F8FB , #002366, 
 // #2546EA

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import axios from 'axios';
 
 import Login from './component/authen/login';
 import Signup from './component/authen/SignUp';
@@ -10,63 +11,97 @@ import Account from './pages/account/account';
 import Analytics from './pages/analytics/analytic';
 import Mainlayout from './pages/mainlayout/mainlayout';
 import Goals from './pages/goals/goal';
+import ProfilePage from './pages/dashboard/profilePage';
+import LandingPage from './component/authen/landingPage/landing';
+
+
 
 const App = () => {
-// check the memory first 
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('isLoggedIn') === 'true'; // localstorage is used so as not to go to the login page once the page is refreshed 
-  });
+  
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const [userData, setUserData] = useState(() => {
-    const savedUser = localStorage.getItem('userData'); // store the user's info and preference 
-    return savedUser ? JSON.parse(savedUser) : {
-      firstName: "",
-      lastName: "",
-      email: "",
-      userInitial: "",
-      profilePic: null
-    };
-  });
-
-  //  SUCCESS HANDLER: Now saves to memory
   const handleLoginSuccess = (data) => {
     const dataWithInitial = {
       ...data,
       userInitial: data.firstName ? data.firstName.charAt(0).toUpperCase() : 'U'
-    };
-    
-    // Save to LocalStorage so refresh doesn't break it
-    localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('userData', JSON.stringify(dataWithInitial));
-    
+    };    
     setIsAuthenticated(true);
     setUserData(dataWithInitial);
-    console.log("Login Success - Data Saved:", dataWithInitial);
+    console.log("Session Active - User Loaded:", dataWithInitial);
   };
   
-  //  LOGOUT HANDLER to Clear the  memory
-   // this one handles the logout and i paased as prop in the sidebar and mainlayout
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userData');
-    setIsAuthenticated(false);
-    setUserData({ firstName: "", lastName: "", email: "", userInitial: "", profilePic: null });
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+    
+        const response = await axios.get('http://localhost:8081/api-session');
+        
+        if (response.data.loggedIn) {
+          handleLoginSuccess(response.data.user);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Session verification failed:", error);
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false); // stpos loading only once the serever responds
+      }
+    };
+    checkSession();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost:8081/api-logout');
+      setIsAuthenticated(false);
+      setUserData(null);
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
+
+ const handleProfileUpdate = (newData) => {
+  setUserData(prev => ({
+    ...prev,
+    ...newData,
+    userInitial: newData.firstName
+      ? newData.firstName.charAt(0).toUpperCase()
+      : 'U'
+  }));
+  handleLoginSuccess(newData);
+};  
+  if (loading) {
+    return (
+      <div className="loading-screen">
+        <div className="spinner"></div>
+        <p>Authenticating...</p>
+      </div>
+    );
+  }
 
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      
-      <Route path="/login" element={isAuthenticated ? <Navigate to="/owner/dashboard" replace /> : <Login onLoginSuccess={handleLoginSuccess} />} />
-      <Route path="/signup" element={isAuthenticated ? <Navigate to="/owner/dashboard" replace /> : <Signup onLoginSuccess={handleLoginSuccess} />} />
-
+      <Route path="/" 
+        element={isAuthenticated ? <Navigate to="/owner/dashboard" replace /> : <LandingPage />} 
+      />
+      <Route path="/login" 
+        element={isAuthenticated ? <Navigate to="/owner/dashboard" replace /> : <Login onLoginSuccess={handleLoginSuccess} />} 
+      />
+      <Route path="/signup" 
+        element={isAuthenticated ? <Navigate to="/owner/dashboard" replace /> : <Signup onLoginSuccess={handleLoginSuccess} />} 
+      />
+     {/* layouts accessible onlh once authenticated */}
       <Route path="/owner" element={isAuthenticated ? <Mainlayout user={userData} onLogout={handleLogout} /> : <Navigate to="/login" replace />}>
         <Route path="dashboard" element={<Dashboard user={userData} />} />
-        <Route path="transactions" element={<Transactions />} />
-        <Route path="budget" element={<Budget />} />
-        <Route path="goals" element={<Goals />} />
-        <Route path="analytics" element={<Analytics />} />
-        <Route path="account" element={<Account />} />
+        <Route path="profile" element={<ProfilePage user={userData} onUpdateUser={handleProfileUpdate} />} />
+        <Route path="transactions" element={<Transactions user={userData} />} />
+        <Route path="budget" element={<Budget user={userData}/>} />
+        <Route path="goals" element={<Goals userId={userData?.id}/>} />
+        <Route path="analytics" element={<Analytics user={userData}/>} />
+        <Route path="account" element={<Account user={userData} onProfileUpdate={handleProfileUpdate}/>} />
       </Route>
         
       <Route path="*" element={<h1>404 - Page Not Found</h1>} />
@@ -75,3 +110,5 @@ const App = () => {
 };
 
 export default App;
+    // Since axios.defaults.withCredentials = true is in main.jsx, 
+        // this request automatically sends the session cookie. 

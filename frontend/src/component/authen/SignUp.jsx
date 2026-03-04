@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // 1. Import axios
-import { Link } from 'react-router-dom';
+import axios from 'axios'; 
+import { Link, useNavigate} from 'react-router-dom';
 import './login.css';
 
-// The URL where your backend server/API is running
-
-const Signup = () => {
-  const API_URL = 'http://localhost:8081/api-register'; 
+const Signup = ({ onLoginSuccess }) => {
+  const API_URL = 'http://localhost:8081/api-register'; // this Url is the server where the app is running on in the backend if i can say
+  
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -25,12 +25,13 @@ const Signup = () => {
     };
 
     try {
-      // axios.post() is used to communicate with the backend
-      const response = await axios.post(API_URL, userData);
-      //  incase of success the 201 or 200 status will react
+      const response = await axios.post(API_URL, userData,{ withCredentials: true });
       setMessage(`Sign-up successful! Welcome ${response.data.user.firstName}!`);
       console.log('Backend response:', response.data);
-
+if (response.status === 201 || response.status === 200) {
+        onLoginSuccess(response.data.user); 
+        navigate('/owner/dashboard');
+      }
       // Clear the form after successful submission
       setFirstName('');
       setLastName('');
@@ -91,3 +92,10 @@ const Signup = () => {
 }
 
 export default Signup;
+// async(placed b4 the fxn), awaits(is placed inside an asyn fxn) and promises(is the axios.post or db.execute)
+// promises is almost the same as the then and catch method which represnts the succes or failure os an async operation and its value. 
+// promise is like a food odering in 03 steps 
+// 1 u place an order(to initiate the async task)
+// 2 the waiter gives u a promise (ticket)i.e u dont have food yet but u will have it (promise object)
+// 3 in the bg, the kitcehn works on ur food (async runing the program so as to prevent freesing in the app)
+// 4 while waiting do anything u wilsh to(ie continue suing the app to prevent any freezing the AWAIT)

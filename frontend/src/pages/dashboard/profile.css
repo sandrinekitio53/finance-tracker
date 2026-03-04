@@ -1,0 +1,205 @@
+.profileContainer {
+  padding: 3rem 2rem;
+  background-color: #f8fafc;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+.profileCard {
+  background: white;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+/* -----------------Avatar image ------------------ */
+.profileHead {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+.profileCircle {
+  position: relative;
+  width: 120px;  height: 120px;
+}
+.profileAvatar {
+  width: 100%;  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #6366f1;
+}
+.profileInitial {
+  width: 100%;  height: 100%;
+  text-transform: capitalize;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  font-weight: bold;
+  border-radius: 50%;
+}
+.upload-badge {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: white;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  font-size: 1.2rem;
+}
+/* -----------The form styling------------ */
+.inputS{
+  margin-bottom: 1.5rem;
+}
+.inputS label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 0.5rem;
+}
+.inputS input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+.inputS input:focus {
+  border-color: #6366f1;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+.inputS input:disabled {
+  background-color: #f1f5f9;
+  color: #475569;
+  cursor: not-allowed;
+  border: 1px dashed #cbd5e1;
+}
+.bioTextarea {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  font-family: inherit; 
+  font-size: 0.95rem;
+  line-height: 1.5;
+  background-color: white;
+  color: #1e293b;
+  resize: none; 
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+.bioTextarea:focus {
+  border-color: #6366f1;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+.bioTextarea:disabled {/* locked mode for the bio textarea */
+  background-color: #f8fafc;
+  color: #64748b;
+  border: 1px dashed #cbd5e1;
+  cursor: not-allowed;
+}
+.xterCount {
+  display: block;
+  text-align: right;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 6px;
+  font-weight: 500;
+}
+.profileActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+/*------------- Btns stylingssss -------------*/
+.editBtn, .saveBtn {
+  background: #6366f1;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.saveBtn { flex: 2; background: #10b981; }
+.cancelBtn { 
+  flex: 1; 
+  background: #f1f5f9; 
+  color: #64748b; 
+  border: none; 
+  padding: 0.8rem; 
+  border-radius: 12px; 
+  font-weight: 600;
+  cursor: pointer;
+}
+.editBtn:hover { background: #4f46e5; }
+.saveBtn:hover { background: #059669; }
+/*------color section------------- */
+.colorPickerCont {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #f8fafc;
+  padding: 10px 15px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  margin-top: 8px;
+}
+.pickerWrapper {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+.colorCircle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px #6366f1; /* Professional ring effect */
+  z-index: 1;
+}
+.hexDisplay {
+  display: flex;
+  flex-direction: column;
+}
+.hexLabel {
+  font-size: 0.7rem;
+  color: #64748b;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.hexValue {
+  font-family: 'Courier New', Courier, monospace; 
+  font-weight: bold;
+  color: #1e293b;
+}
+.colorHint {
+  display: block;
+  margin-top: 6px;
+  color: #94a3b8;
+  font-style: italic;
+}
+.hidden-color-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;      /* Keep it invisible but active */
+  cursor: pointer;
+  z-index: 100;  
+}

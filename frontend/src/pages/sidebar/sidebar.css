@@ -43,7 +43,7 @@
 /*                   Hover effect               */
 .nav-item:hover {
   background-color: rgba(130, 162, 221, 0.178); 
-  transform: translateX(5px); /* for the slide effect */
+  transform: translateX(5px); 
 }
 .nav-item.nav-icon:hover{
 background-color: #2546EA;

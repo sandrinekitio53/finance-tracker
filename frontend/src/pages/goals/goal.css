@@ -43,4 +43,4 @@
 .footerLabel { color: #94a3b8; font-size: 0.85rem; }
 .footerValue { font-size: 0.9rem; font-weight: 600; color: #1e293b; }
 
-.remainingPrice { color: #1e293b; } /* Change to red if you want to highlight it */
+.remainingPrice { color: #1e293b; } 

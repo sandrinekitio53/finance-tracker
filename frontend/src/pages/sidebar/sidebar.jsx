@@ -34,5 +34,5 @@ const Sidebar = ({ onLogout }) => {
 };
 
 export default Sidebar;
-
-// the nav-item is like the UNIFORM that every set of my links have on 
+// useLocation, location.pathname is like a GPS  of the app i.e looking for a page based on the pathname and it will take u there directly
+// the nav-item is like the UNIFORM that every set of my LINKS have on . so any styling made shld be done on the nav-item

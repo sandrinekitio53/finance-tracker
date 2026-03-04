@@ -3,7 +3,6 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../sidebar/sidebar";
 import "./main.css";
 
-// user={userData}  inthe app.jsx
 const Mainlayout = ({ onLogout }) => {
  
   return (
@@ -19,3 +18,6 @@ const Mainlayout = ({ onLogout }) => {
 };
 
 export default Mainlayout;
+// Outlet is that react-router-dom elt that provides access to diff pages. 
+// ie it acts like a window where the diff pages are found 
+// onlogout is passed as a prop from the app.jsx

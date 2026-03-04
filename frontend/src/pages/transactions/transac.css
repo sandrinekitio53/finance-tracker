@@ -1,6 +1,6 @@
 .transactionsHeader {
   display: flex;
-  justify-content: space-between; /* Pushes buttons to the right */
+  justify-content: space-between; 
   align-items: center;
   margin-bottom: 20px;
 }
@@ -28,7 +28,7 @@
   display: flex;
   gap: 15px;
   margin-bottom: 25px;
-  flex-wrap: wrap; /* Good for mobile responsiveness */
+  flex-wrap: wrap; 
 }
 .dateFilter{
   gap: 10px;
@@ -88,9 +88,6 @@ thead{
   background-color: white;
   box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
-
-/*  the form drwaer stylinggggggggggggggggggg */
-/* The Overlay (Darkens the background) */
 .drawerOverlay {
   position: fixed;
   top: 0;
@@ -99,7 +96,7 @@ thead{
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
   display: flex;
-  justify-content: flex-end; /* Keeps content to the right */
+  justify-content: flex-end;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease-in-out;
@@ -123,12 +120,12 @@ justify-content: space-between;
   height: 100%;
   background: white;
   padding: 30px;
-  transform: translateX(100%); /* Start off-screen to the right */
+  transform: translateX(100%);
   transition: transform 0.3s ease-in-out;
   box-shadow: -5px 0 15px rgba(0,0,0,0.1);
 }
 .drawerOverlay.active .drawerContent {
-  transform: translateX(0); /* Slide into view */
+  transform: translateX(0); 
 }
 /* Form Styling */
 .drawerForm {
@@ -170,7 +167,7 @@ justify-content: space-between;
   align-items: center;
   margin-top: 20px;
   padding: 15px 0;
-  color: #64748b; /* Professional gray */
+  color: #64748b; 
   font-size: 0.9rem;
 }
 .paginationControls {
