@@ -203,3 +203,68 @@
   cursor: pointer;
   z-index: 100;  
 }
+
+@media (max-width: 768px) {
+  .profileContainer {
+    padding: 10px; /* Small padding so it doesn't hit screen edges */
+    padding-bottom: 100px; /* Extra space for the Bottom Nav Bar */
+  }
+
+  .profileCard {
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: none; /* Flatter look is more "app-like" */
+  }
+
+  .profileHead {
+    flex-direction: row; /* Avatar and Edit button side-by-side on mobile */
+    justify-content: space-between;
+    width: 100%;
+  }
+.upload-badge {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+    bottom: 0;
+    right: 0;
+  }
+  .profileCircle {
+    width: 80px;
+    height: 80px;
+  }
+
+  .profileInitial {
+    font-size: 28px;
+  }
+
+  /* Make inputs bigger for easier finger tapping */
+  .inputS input, .inputS textarea {
+    font-size: 16px !important; /* Prevents iOS from zooming in on focus */
+    padding: 14px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .profileActions {
+    position: sticky;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    background: #fff;
+    padding-top: 15px;
+  }
+
+  .saveBtn, .cancelBtn {
+    width: 100%;
+    padding: 15px;
+    font-weight: 700;
+  }
+
+  /* Adjust color picker for mobile */
+  .colorPickerCont {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}

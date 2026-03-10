@@ -45,9 +45,9 @@ const LandingPage = () => {
           <a href="#features">Features</a>
           <a href="#overview">Overview</a>
           <a href="#faq">FAQ</a>
-          <a href="#contact">Contact</a>
+          <a href="#contact">Contact</a> 
           <Link to="/login" className="btn-outline">Login</Link>
-          <Link to="/signup" className="btn-primary">Sign Up</Link>
+          <Link to="/signup" className="btn-primary signupBtn" style={{color:`white`}}>Sign Up</Link>
         </div>
       </nav>
 
@@ -55,11 +55,7 @@ const LandingPage = () => {
   <div className="heroBgImage" style={{ backgroundImage: `url(${heroImage})` }}></div>
   
   <div className="heroOverlay">
-    <div className="glassContentCard animateOnScroll">
-      <div className="promoBadge">
-        <span className="sparkleIcon">✨</span> 
-        Trusted by 50,000+ Visionaries
-      </div>      
+    <div className="glassContentCard animateOnScroll">     
       <h1>Take Control of Your <span className="gradientText">Money</span> <br />
         Build Your Future in FCFA</h1>    
       <p>
@@ -73,7 +69,7 @@ const LandingPage = () => {
       </div>
 
       <div className="heroFooterTags">
-        <div className="tag"><ShieldCheck size={16} /> AES-256 Encryption</div>
+        <div className="tag"><ShieldCheck size={16} /> secured system</div>
         <div className="tag"><Zap size={16} /> Instant Sync</div>
       </div>
     </div>
@@ -142,7 +138,6 @@ const LandingPage = () => {
 {/* --- SECTION 3: FEATURES GRID --- */}
       <section className="featuresGrid" id="features">
         <div className="sectionHeaderCentred animateOnScroll">
-          <div className="miniBadge">💎 Core Features</div>
           <h2>Built for the <span>Next Generation</span></h2>
           <p className="mainSubtitle">
             FinGuard isn't just a spreadsheet. It's a high-performance system 
@@ -151,7 +146,7 @@ const LandingPage = () => {
         </div>
 
         <div className="cardContainer">
-          {/* Card 1: Visual Analytics */}
+          {/* Visual Analytics */}
           <div className="featCard animateOnScroll">
             <div className="cardHeader">
               <div className="iconBox purple"><PieChart size={22} /></div>
@@ -164,7 +159,7 @@ const LandingPage = () => {
             </p>
           </div>
 
-          {/* Card 2: FCFA Native */}
+          {/* CFCFA Native */}
           <div className="featCard animateOnScroll">
             <div className="cardHeader">
               <div className="iconBox green"><Globe size={22} /></div>
@@ -195,7 +190,6 @@ const LandingPage = () => {
       {/* --- TESTIMONIALS --- */}
       <section className="testimonialSection" id="testimonials">
         <div className="sectionHeaderCentred animateOnScroll">
-          <div className="miniBadge">💬 Social Proof</div>
           <h2>Trusted by <span>Visionaries</span></h2>
           <p className="mainSubtitle">
             Join thousands of ambitious individuals who have already 
@@ -237,7 +231,6 @@ const LandingPage = () => {
 
 <section className="contactSection" id="contact">
         <div className="sectionHeaderCentred animateOnScroll">
-          <div className="miniBadge">📩 Contact Us</div>
           <h2>Get in <span>Touch</span></h2>
           <p className="mainSubtitle">Have questions about your vault? Our team is here to help you secure your future.</p>
         </div>

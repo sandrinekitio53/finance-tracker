@@ -73,12 +73,10 @@
 .statusBadge.complete { background-color: #c6f6d5; color: #2f855a; }
 .statusBadge.failed { background-color: #fed7d7; color: #c53030; }
 .statusBadge.pending { background-color: #fefcbf; color: #b7791f; }
-
-/* Table styling for that clean look */
 .financeTable {
   width: 100%;
   border-collapse: separate;
-  border-spacing: 0 15px; /* Gives that "row" look from your design */
+  border-spacing: 0 15px; 
 }
 thead{
   width: 100%;
@@ -87,6 +85,9 @@ thead{
 .financeTable tr {
   background-color: white;
   box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+#trInfos{
+  padding: 6px 10px ;
 }
 .drawerOverlay {
   position: fixed;
@@ -201,4 +202,184 @@ justify-content: space-between;
   align-items: center;
   border-radius: 4px;
   font-weight: 600;
+}
+
+/* transac.css */
+
+/* transac.css */
+
+@media (max-width: 768px) {
+  .actionButtons {
+    display: flex;
+    flex-direction: row; 
+    width: 100%; 
+    gap: 10px;
+  }
+  .addBtn {
+    flex: 1; 
+    height: 48px; 
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
+  .incomeBtn {
+    background: #e8fff0 !important;
+    color: #10b981 !important;
+  }
+
+  .expenseBtn {
+    background: #fff0f0 !important;
+    color: #ef4444 !important;
+  }
+  .transactionsContainer {
+    padding: 15px;
+    padding-bottom: 120px; 
+  }
+  .transactionsHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 10px;
+    gap: 15px; 
+  }
+  .pageTitle {
+    font-size: 20px;
+    font-weight: 900;
+    color: #1e293b;
+    letter-spacing: -0.5px;
+  }
+  .filterSection {
+    display: flex;
+    flex-wrap: nowrap; 
+    overflow-x: auto; 
+    gap: 8px;
+    padding: 5px 0 15px 0;
+    scrollbar-width: none; 
+    -webkit-overflow-scrolling: touch;
+  }
+  .filterSection::-webkit-scrollbar {
+    display: none; 
+  }
+  .filterDropdown {
+    flex: 0 0 auto;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    outline: none;
+    min-width: 110px;
+  }
+  .filterDropdown:focus {
+    border-color: #4f46e5;
+    color: #4f46e5;
+  }
+  .filterInput {
+    width: 110px;
+    height: 35px;
+    border-radius: 25px;
+    border: 1px solid #e2e8f0;
+    font-size: 11px;
+    padding: 0 10px;
+  }
+  .financeTable thead { display: none; }
+  
+  .financeTable, .financeTable tbody, .financeTable tr, .financeTable td {
+    display: block;
+    width: 100%;
+  }
+  .financeTable tr {
+    display: grid;
+    grid-template-areas: 
+      "category amount"
+      "date method"
+      "status actions";
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    
+    background: #ffffff;
+    margin-bottom: 16px;
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+  }
+  .trIncome { border-left: 6px solid #10b981 !important; }
+  .trExpense { border-left: 6px solid #ef4444 !important; }
+  .financeTable td {
+    padding: 0;
+    border: none;
+    display: flex;
+    align-items: center;
+  }
+  .colCategory { 
+    grid-area: category; 
+    font-weight: 800; 
+    font-size: 16px; 
+    color: #1e293b;
+  }
+
+  .colAmount { 
+    grid-area: amount; 
+    font-weight: 900; 
+    font-size: 18px; 
+    justify-content: flex-end;
+  }
+
+  .colDate { 
+    grid-area: date; 
+    font-size: 12px; 
+    color: #94a3b8; 
+    font-weight: 600;
+  }
+
+  .colMethod { 
+    grid-area: method; 
+    font-size: 12px; 
+    color: #64748b; 
+    background: #f8fafc;
+    padding: 2px 8px !important;
+    border-radius: 6px;
+    width: fit-content;
+    justify-self: flex-end;
+  }
+
+  .colStatus { 
+    grid-area: status; 
+    margin-top: 8px;
+  }
+
+  .colActions { 
+    grid-area: actions; 
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  /* Modern Action Buttons */
+  .btnEdit, .btnDelete {
+    background: #f1f5f9;
+    border: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .btnDelete { color: #ef4444; background: #fef2f2; }
 }

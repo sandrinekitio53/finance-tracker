@@ -12,11 +12,12 @@ const Sidebar = ({ onLogout }) => {
       <div className="sidebarHeader">logo-image FinanceTracker</div>
       
       <nav className="navMenu">
-        {SidebarLinks.map((link) => {          
+        {SidebarLinks.map((link) => {  
+          const IconComponent = link.icon;        
           return (
             <Link key={link.id} to={link.path} className={location.pathname === link.path ? "nav-item active" : "nav-item"}>
               <span className="nav-icon">
-                <link.icon />
+               <IconComponent size={20} />
               </span>
               
               <span className="nav-text">{link.label}</span>

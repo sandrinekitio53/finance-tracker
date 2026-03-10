@@ -1,64 +1,161 @@
-.container{
-     min-height: 100vh;
-     /* background: url('../../assets/download\ \(2\).jpeg') no-repeat center/cover;  */
-     /* this is the background image which i want to make alittle bit blur and the login shoul be ontop of the blur bg  */
+/* login.css - Clean & Professional (No :root) */
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8fafc; /* Professional Off-White */
+  padding: 20px;
 }
-.container, button[type="submit"]{
-   display: flex;
-    margin: auto;   
-    align-items: center;
-    justify-content: center;
+
+form {
+  background: #ffffff;
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box; /* Ensures padding doesn't break width */
 }
-form{  
-     padding: 3%;   
-    width: 300px;
-    border-radius: 6px;
-    border: 1px solid black
+
+h2 {
+  font-size: 26px;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 10px;
+  text-align: center;
+  letter-spacing: -0.5px;
 }
-.container h2{    text-align: center;
+
+#login-head {
+  color: #4f46e5; /* FinGuard Primary Purple */
+}
+
+.error {
+  background: #fff1f2;
+  color: #e11d48;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 20px;
+  border: 1px solid #ffe4e6;
+}
+
+.l1 {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.l1 label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.l1 input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
+  font-size: 16px; /* Essential: Prevents iOS auto-zoom on focus */
+  color: #1e293b;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.l1 input:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+
+.logBtn,.singBtn{
+  width: 100%;
+  padding: 16px;
+  background-color: #4f46e5;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background-color: #4338ca;
+}
+
+button:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.p-option {
+  text-align: center;
+  margin-top: 25px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.p-option a {
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+/* --- MULTI-DEVICE RESPONSIVENESS --- */
+
+/* 1. iPhone 11, 12, 13, 14, 15 Pro & Large Androids (Width: ~390px - 430px) */
+@media (max-width: 430px) {
+  .container {
+    background-color: #ffffff; /* Seamless full-screen look */
+    align-items: flex-start; /* Better thumb-reach for login */
+    padding-top: 40px;
+  }
+
+  form {
+    border: none;
+    box-shadow: none;
+    padding: 24px;
+    max-width: 100%;
+  }
+
+  h2 {
+    font-size: 30px;
+    text-align: left; /* Modern mobile-first alignment */
+  }
+  
+  .p-option {
+      text-align: left;
+  }
+}
+
+/* 2. Standard Android & Google Pixel (Width: ~360px - 380px) */
+@media (max-width: 380px) {
+  form {
+    padding: 20px;
+  }
+  
+  .l1 input {
+    padding: 12px;
+  }
+}
+
+/* 3. Small Devices (iPhone SE, Older Androids) (Width: <320px) */
+@media (max-width: 320px) {
+  h2 {
     font-size: 24px;
-    color: #2546EA;
-}
-#login-head{
-    text-decoration: underline;    
-}
-.l1{
-    margin: 10px 0px;
-}
-.l1 label{
-   font-size: 20px;
-    text-transform: capitalize;
-}
-.l1 input{
-    box-shadow: 0px 3px 10px #ccc;
-    margin: 10px 0px;
-    width: 100%;
-    height: 28px;
-    padding: 6px 4px;
-    border-radius: 4px;
-    border: none;
-    /* border: 1px solid #ccc; */
-    outline-color:2546EA ;
-    font-size: 16px;
-}
-button[type="submit"]{
-    width: 95%;
-    height: 40px;
-    font-size: 19px;
-    margin-top: 30px;
-    padding: 15px 0px;
-    background: #2543ea;
-    border: none;
-    color: white;
-    border-radius: 6px;    
-}
-.p-option{
-    margin-top: 15px;
-    text-align: center;
-}
-.p-option a{
-    text-decoration: underline;
-    font-size: 18px;
-    font-weight: 500;
-    color: #2543ea;
+  }
+  
+  button {
+    padding: 12px;
+  }
 }

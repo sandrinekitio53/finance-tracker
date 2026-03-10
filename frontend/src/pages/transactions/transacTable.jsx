@@ -21,17 +21,21 @@ const TransacTable = ({ transactions, onDelete, onEdit }) => {
         </thead>
         <tbody>
           {transactions.map((item) => (
-            <tr key={item.id}>
-              <td>{new Date(item.date).toLocaleDateString()}</td>
-              <td>{item.category}</td>
-              <td>{item.method}</td>
-              <td className={`amountCell ${item.type === 'income' ? 'income-text' : 'expense-text'}`}>
-                {Number(item.amount).toLocaleString()} F
+         <tr id='trInfos' key={item.id} className={item.type === 'income' ? 'trIncome' : 'trExpense'}>
+              <td className="colDate">{new Date(item.date).toLocaleDateString()}</td>
+              <td className="colCategory">{item.category}</td>
+              <td className="colMethod">{item.method}</td>
+              <td className={`colAmount ${item.type === 'income' ? 'incomeText' : 'expenseText'}`}>
+                {item.type === 'income' ? '+' : '-'}{Number(item.amount).toLocaleString()} F
               </td>
-              <td><span className={`statusBadge ${item.status.toLowerCase()}`}>{item.status}</span></td>
-              <td className="actionsCell">
-                <button className="actionBtn edit" onClick={() => onEdit(item)}>✎</button>
-                <button className="actionBtn delete" onClick={() => onDelete(item.id)}>🗑</button>
+              <td className="colStatus">
+                <span className={`statusBadge ${item.status.toLowerCase()}`}>
+                  {item.status}
+                </span>
+              </td>
+              <td className="colActions">
+                <button className="btnEdit" onClick={() => onEdit(item)}>✎</button>
+                <button className="btnDelete" onClick={() => onDelete(item.id)}>🗑</button>
               </td>
             </tr>
           ))}

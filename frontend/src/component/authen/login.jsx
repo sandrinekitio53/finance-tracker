@@ -44,7 +44,7 @@ const handleSubmit = async (event) => {
         <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
       </div>
 
-      <button type="submit">Log In</button>
+      <button className ="logBtn" type="submit">Log In</button>
       <p className='p-option'>
         Don't have an account? <Link to="/signup">Sign Up</Link>
       </p>

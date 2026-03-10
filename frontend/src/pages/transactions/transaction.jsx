@@ -133,10 +133,10 @@ const Transactions = ({ user }) => {
           <option value="OM">OM</option>
         </select>
 
-        <div className="dateFilter">
+        {/* <div className="dateFilter">
           <input type="date" className="filterInput" />
           <input type="date" className="filterInput" />
-        </div>
+        </div> */}
       </div>
         
       <div className="tableWrapper">
@@ -144,6 +144,7 @@ const Transactions = ({ user }) => {
           transactions={currentRows} 
           onDelete={handleDelete} 
           onEdit={handleEdit}
+          isMobile={window.innerWidth <= 768}
         />
       </div>
 

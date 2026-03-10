@@ -81,7 +81,7 @@ if (response.status === 201 || response.status === 200) {
         <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
       </div>
 
-      <button type="submit">Sign Up</button>
+      <button className='singBtn' type="submit">Sign Up</button>
       <p className='p-option'>
         Already have an Account? <Link to="/login">Log In</Link>
       </p>

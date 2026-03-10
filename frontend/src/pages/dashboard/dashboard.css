@@ -19,6 +19,11 @@
   font-weight: 700;
   color: #002366; 
   text-transform: capitalize;
+  text-overflow: ellipsis; /* Prevents long names from breaking the line */
+}
+.headerWelcome{
+  flex: 1;
+  min-width: 0;
 }
 .headerWelcome .subtitle  {
   margin-top: 10px;
@@ -61,6 +66,7 @@
 .profilePic .profileImg{
   border-radius: 50%;
   width: 44px ;
+  object-fit: cover;
   height: 44px;
 }
 .userName {
@@ -401,18 +407,276 @@
   to { opacity: 1; transform: translate(-50%, 0); }
 }
 
+/* ------------mobile responsivnes----------------------- */
 @media (max-width: 1024px) {
   .dashboard-main-content {
     grid-template-columns: 1fr;
   }
 }
+
+/* dashboard.css - Mobile Overlap Fix */
+
 @media (max-width: 768px) {
-  .summary-grid {
-    grid-template-columns: 1fr 1fr;
+  .contentHeader {
+    display: flex;
+    flex-direction: row; /* Keep side-by-side */
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 0;
+  }
+
+  .headerWelcome {
+    flex: 1;
+    min-width: 0; /* Enables the ellipsis (...) */
+  }
+
+  .headerWelcome h1 {
+    font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Prevents text crashing into avatar */
+    margin: 0;
+  }
+
+  .headerWelcome .subtitle {
+    display: none; /* Cleaner look on mobile */
+  }
+
+  .userProfileBox {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  .userInfo {
+    display: none; /* Hide name/email text next to circle on mobile */
+  }
+
+  .profilePic {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0; /* Prevents circle from getting squashed */
+  }
+
+  /* Stack Summary Cards */
+  .summaryGrid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  /* Dashboard Content Stacking */
+  .dashboard-main-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 }
-@media (max-width: 480px) {
-  .summary-grid {
+
+@media (max-width: 430px) {
+  .contentHeader {
+    padding: 10px 0;
+    margin-bottom: 20px;
+  }
+ .summary-grid {
     grid-template-columns: 1fr;
+  }
+  .headerWelcome h1 {
+    font-size: 20px; /* Smaller for iPhone 11 screen */
+  }
+
+  .userEmail {
+    display: none; /* Hide email on small screens to prevent clutter */
+  }
+
+  .profilePic {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 390px) {
+  .headerWelcome h1 {
+    font-size: 22px;
+  }
+  .summaryCard {
+    padding: 18px;
+  }
+  .cardAmount {
+    font-size: 20px;
+  }
+}
+
+.mogul-modal {
+  width: 90%;
+  max-width: 450px;
+  background: white;
+  padding: 25px;
+  border-radius: 24px;
+  position: relative;
+}
+
+/* sidebar.css */
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  z-index: 1000;
+}
+
+/* MOBILE VIEW - BOTTOM BAR */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 80px; /* Slightly taller for easier tapping */
+    background: #ffffff;
+    border-top: 2px solid #f1f5f9;
+    display: flex;
+    padding-bottom: env(safe-area-inset-bottom); /* iPhone 11/12 support */
+    z-index: 2000;
+  }
+
+  .navMenu {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 Main priority items */
+    width: 100%;
+    align-items: center;
+  }
+
+  .nav-item {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    color: #64748b;
+  }
+
+  .nav-icon svg {
+    width: 26px; /* Larger icons for visibility */
+    height: 26px;
+  }
+
+  .nav-text {
+    font-size: 11px; /* Larger, readable font */
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+
+  .nav-item.active {
+    color: #4f46e5;
+    background: #f5f3ff; /* Sublte highlight to show exactly where the user is */
+    border-top: 3px solid #4f46e5;
+  }
+  .summaryGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .summaryCard {
+    padding: 12px; 
+    border-radius: 16px;
+    margin-bottom: 0; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .cardLabel {
+    font-size: 11px; /* Smaller label */
+    margin-bottom: 4px;
+  }
+  .cardAmount {
+    font-size: 18px; 
+    font-weight: 800;
+    margin: 4px 0;
+  }
+  .cardFooter {
+    font-size: 10px; 
+    margin-top: 4px;
+  }
+  .trend-indicator {
+    padding: 2px 6px;
+    font-size: 9px;
+  }
+  .dashboard-section h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  .tx-item {
+    padding: 10px;
+    margin-bottom: 8px;
+  }
+  .tx-name {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .tx-amount {
+    font-size: 13px;
+  }
+
+  .mini-progress-bar {
+    height: 6px;
+    margin-top: 5px;
+  }
+  .main-fab {
+    position: fixed;
+    bottom: 85px; 
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #4f46e5;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+    z-index: 1001;
+    border: none;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .quick-actions-wrapper.open .main-fab {
+    transform: rotate(45deg); /* Turns + into X */
+    background: #ef4444; /* Change to red when opening */
+  }
+  .actions-menu {  /* the popup action ontop of the bottom navebar  */
+    position: fixed;
+    bottom: 150px; /* Pops up above the FAB */
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+  }
+  .quick-actions-wrapper.open .actions-menu {
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .action-item {
+    width: 160px; /* Fixed width for a neat list */
+    height: 48px;
+    background: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    gap: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: 1px solid #e2e8f0;
+    font-weight: 700;
+    font-size: 14px;
   }
 }
