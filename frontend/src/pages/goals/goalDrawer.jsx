@@ -21,17 +21,15 @@ const GoalDrawer = ({ isOpen, onClose, onSave, userId, initialData }) => {
     };
 
     try {
-      // FIX: If we have an ID, we UPDATE (PUT). If not, we ADD (POST).
-      if (initialData?.id) {
-        // EDIT MODE [cite: 2026-01-09]
+     
+      if (initialData?.id) {  
         await axios.put(`http://localhost:8081/api-goals/update/${initialData.id}`, goalData);
       } else {
-        // CREATE MODE [cite: 2026-02-16]
         await axios.post('http://localhost:8081/api-goals/add', goalData);
       }
 
-      onSave(); // Refreshes the grid in Goals.jsx
-      onClose(); // Closes the drawer
+      onSave(); 
+      onClose(); 
     } catch (error) {
       console.error("Goal Submission Failed:", error);
       alert("Error syncing with XAMPP vault. Check if your server is running.");

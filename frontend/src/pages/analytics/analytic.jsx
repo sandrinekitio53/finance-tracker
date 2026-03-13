@@ -227,7 +227,8 @@ const Analytics = ({ user }) => {
         <h3>Spending Insights</h3>
         {topCategory.name ? (
           <div className="insightCard">
-            <h4>{topCategory.name} is your biggest expense</h4>
+        {/*  this insight card should be able of just  showing the 3 bigeest spendings made */}
+            <h4><span>{topCategory.name}</span> is your biggest expense</h4>
             <p>This category accounts for {topCategory.percentage}% of your total spending. Consider reviewing your {topCategory.name} habits!</p>
           </div>
         ) : (

@@ -26,7 +26,7 @@ const TransacTable = ({ transactions, onDelete, onEdit }) => {
               <td className="colCategory">{item.category}</td>
               <td className="colMethod">{item.method}</td>
               <td className={`colAmount ${item.type === 'income' ? 'incomeText' : 'expenseText'}`}>
-                {item.type === 'income' ? '+' : '-'}{Number(item.amount).toLocaleString()} F
+                {item.type === 'income' ? '+' : '-'}{Number(item.amount).toLocaleString()} frs
               </td>
               <td className="colStatus">
                 <span className={`statusBadge ${item.status.toLowerCase()}`}>

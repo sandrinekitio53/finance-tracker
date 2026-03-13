@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
 const db = require('./db'); 
 const session = require('express-session'); 
+const  saltRounds = 10;
 
 const app = express();
 
@@ -39,13 +41,27 @@ app.get('/api-session', (req, res) => {
 });
 
 app.post('/api-register', async (req, res) => {
-    const { firstName, lastName, email, password } = req.body;
-    const sqlInsert = 'INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)';
-
     try {
-        const [result] = await db.execute(sqlInsert, [firstName, lastName, email, password]);
-        const newUser = { id: result.insertId, firstName, lastName, email };
-//    auto-loggin after signup
+        const { firstName, lastName, email, password } = req.body;
+
+        if (!password) {
+            return res.status(400).json({ message: 'Password is required for registration.' });
+        }
+
+        // Hash the password AFTER it's been received from req.body
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        
+        const sqlInsert = 'INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)';
+        const [result] = await db.execute(sqlInsert, [firstName, lastName, email, hashedPassword]);
+        
+        const newUser = { 
+            id: result.insertId, 
+            firstName, 
+            lastName, 
+            email 
+        };
+
+        // Auto-login session management
         req.session.user = newUser;
 
         return res.status(201).json({
@@ -53,6 +69,7 @@ app.post('/api-register', async (req, res) => {
             user: newUser
         });
     } catch (error) {
+        console.error("Signup Sync Error:", error);
         if (error.code === 'ER_DUP_ENTRY') {
             return res.status(400).json({ message: 'This email is already registered.' });
         }
@@ -62,29 +79,40 @@ app.post('/api-register', async (req, res) => {
 
 app.post('/api-login', async (req, res) => {
     const { email, password } = req.body;
-    const sql = 'SELECT id, first_name, last_name, email, password FROM users WHERE email = ?';
+    const sql = 'SELECT * FROM users WHERE email = ?';
 
     try {
         const [rows] = await db.execute(sql, [email]); 
         const user = rows[0]; 
 
-        if (!user || password !== user.password) {
+        // 1. Check if user exists
+        if (!user) {
             return res.status(401).json({ message: 'Invalid email or password.' });
         }
 
+        // 2. Compare provided password with hashed version in DB
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid email or password.' });
+        }
+
+        // 3. Map database snake_case to frontend camelCase
         req.session.user = { 
             id: user.id, 
             firstName: user.first_name, 
             lastName: user.last_name, 
-            email: user.email 
+            email: user.email,
+            bio: user.bio,
+            profilePic: user.profile_pic
         };
 
         return res.status(200).json(req.session.user);
     } catch (error) {
+        console.error("Login Vault Error:", error);
         res.status(500).json({ message: 'Server error during login.' });
     }
 });
-
 app.post('/api-logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -344,24 +372,44 @@ app.delete('/api/delete-budget/:id', async (req, res) => {
   res.sendStatus(200);
 });
 // ----------------------------ACCOUNT ROUTE-----------------------------
-// --- for password Update Node --- but isnot yet fxnal so check it out 
-app.put('/api-update-password/:id', (req, res) => {
+app.put('/api-update-full-account/:id', async (req, res) => {
     const userId = req.params.id;
-    const { newPassword } = req.body;
+    const { firstName, lastName, email, bio, profilePic, newPassword } = req.body;
 
-    if (!newPassword || newPassword.length < 6) {
-        return res.status(400).json({ error: "Password must be at least 6 characters." });
-    }
+    try {
+        let updateFields = [
+            "first_name = ?", 
+            "last_name = ?", 
+            "bio = ?", 
+            "profile_pic = ?"
+        ];
+        let queryParams = [firstName, lastName, bio, profilePic];
 
-    const sql = "UPDATE users SET password = ? WHERE id = ?";
-    
-    db.query(sql, [newPassword, userId], (err, result) => {
-        if (err) {
-            console.error("Database Error:", err);
-            return res.status(500).json({ error: "Vault synchronization failed." });
+        // 2. Conditionally add password only if it's provided
+        if (newPassword && newPassword.trim().length >= 6) {
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+            updateFields.push("password = ?");
+            queryParams.push(hashedPassword);
         }
-        
-        console.log(`User ${userId} password updated successfully.`);
-        res.status(200).json({ message: "Security protocol updated!" });
-    });
+
+        // 3. Finalize query
+        const sql = `UPDATE users SET ${updateFields.join(', ')} WHERE id = ?`;
+        queryParams.push(userId);
+
+        const [result] = await db.execute(sql, queryParams);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "User identity not found in vault." });
+        }
+
+        // 4. Return the fresh user data (without password) for the frontend state
+        res.status(200).json({
+            message: "Vault synchronized!",
+            user: { id: userId, firstName, lastName, email, bio, profilePic }
+        });
+
+    } catch (error) {
+        console.error("Database Sync Error:", error);
+        res.status(500).json({ error: "Critical failure during vault update." });
+    }
 });

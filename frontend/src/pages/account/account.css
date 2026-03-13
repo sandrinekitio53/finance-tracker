@@ -1,373 +1,172 @@
-.accountContainer {
-  display: flex;
-  gap: 2rem;
-  padding: 2.5rem;
-  min-height: 90vh;
-  background: #f8fafc;
+/* Container */
+.unifiedAccountWrapper {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: #1e293b;
 }
 
-/* Sidebar Styling */
-.settingsSidebar {
-  width: 320px;
-  background: white;
-  border-radius: 24px;
-  padding: 2rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+/* Sharp Header */
+.accountHeader {
   display: flex;
-  flex-direction: column;
-}
-.avatarCircle {
-  width: 80px;
-  height: 80px;
-  border-radius: 24px; /* Squircle design */
-  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  font-weight: 800;
-  color: white;
-  margin-bottom: 1rem;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 40px;
 }
-.navLink {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 1rem;
-  border-radius: 16px;
-  color: #64748b;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  transition: all 0.3s ease;
-}
-.navLink.active {
-  background: #6366f1; /* Vibrant Indigo */
-  color: white;
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
-}
-.iconBox {
-  background: rgba(99, 102, 241, 0.1);
-  padding: 8px;
-  border-radius: 10px;
-  display: flex;
-}
-.navLink.active .iconBox { background: rgba(255, 255, 255, 0.2); }
 
-/* Main Content Styling */
-.settingsCard {
-  background: white;
-  border-radius: 24px;
-  padding: 3rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
-  animation: slideUp 0.5s ease;
-}
-.saveBtn {
-  margin-top: 2rem;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 14px;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-.saveBtn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4);
-}
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-/* ------------------Container for the form section */
-.settingsForm {
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
-}
-.formSectionTitle {
-  font-size: 0.75rem;
+.accountHeader h1 {
+  font-size: 20px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #6366f1;
-  border-left: 4px solid #6366f1;
-  padding-left: 12px;
-}
-/* Vibrant Input Group Logic  */
-.vibrantInputGroup {
-  position: relative;
-  margin-top: 1rem;
+  letter-spacing: -0.5px;
+  margin: 0;
 }
 
-.vibrantInputGroup input {
-  width: 100%;
-  padding: 12px 0;
-  font-size: 1.1rem;
-  color: #1e293b;
-  border: none;
-  border-bottom: 2px solid #e2e8f0;
-  background: transparent;
-  transition: all 0.3s ease;
+/* Logic Blocks */
+.accountSection {
+  margin-bottom: 50px;
 }
 
-/* Floating Label Effect */
-.vibrantInputGroup label {
-  position: absolute;
-  top: 12px;
-  left: 0;
-  color: #94a3b8;
-  pointer-events: none;
-  transition: all 0.3s ease;
-  font-weight: 500;
-}
-
-/* Logic for when user clicks or types */
-.vibrantInputGroup input:focus ~ label,
-.vibrantInputGroup input:valid ~ label {
-  top: -12px;
-  font-size: 0.8rem;
-  color: #6366f1;
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 25px;
+  font-size: 12px;
   font-weight: 700;
-}
-
-/* Animated Underline */
-.inputBar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 2px;
-  width: 0;
-  background: linear-gradient(90deg, #6366f1, #a855f7);
-  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.vibrantInputGroup input:focus ~ .inputBar {
-  width: 100%;
-}
-
-/* Locked Field Styling */
-.vibrantInputGroup.locked input {
-  color: #94a3b8;
-  border-bottom-style: dashed;
-}
-
-.lockIcon {
-  position: absolute;
-  right: 0;
-  top: 15px;
-  color: #cbd5e1;
-}
-
-/* Vibrant Action Button */
-.neonSubmitBtn {
-  position: relative;
-  padding: 16px 32px;
-  background: #1e293b;
-  color: white;
-  border-radius: 12px;
-  font-weight: 700;
-  overflow: hidden;
-  transition: transform 0.2s;
-}
-
-.neonSubmitBtn:hover {
-  transform: translateY(-2px);
-}
-
-.btnGlow {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: linear-gradient(45deg, #6366f1, #a855f7);
-  opacity: 0;
-  transition: opacity 0.3s;
-  z-index: 1;
-}
-
-.neonSubmitBtn:hover .btnGlow {
-  opacity: 1;
-}
-
-.neonSubmitBtn span {
-  position: relative;
-  z-index: 2;
-}
-/* Section Badge Detail */
-.sectionBadge {
-  font-size: 0.65rem;
-  background: rgba(99, 102, 241, 0.1);
-  color: #6366f1;
-  padding: 4px 12px;
-  border-radius: 100px;
-  width: fit-content;
-  font-weight: 900;
+  color: #64748b;
+  text-transform: uppercase;
   letter-spacing: 1.5px;
-  margin-bottom: -1rem;
 }
 
-/* Avatar Validation Ring */
+/* Industrial Avatar (Square with slight radius) */
+.avatarCenter {
+  margin-bottom: 30px;
+}
+
 .avatarEditor {
-  position: relative;
-  width: 90px;
-  height: 90px;
-  padding: 5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
 }
 
-.avatarRing {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  border: 2px dashed #6366f1;
-  border-radius: 32px;
-  opacity: 0.3;
-}
-
-.animateRotate {
-  animation: slowRotate 10s linear infinite;
-}
-
-@keyframes slowRotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Detail Input Styling [cite: 2026-01-09] */
-.detailInputWrapper {
-  position: relative;
-  background: #f8fafc;
-  border-radius: 14px;
-  padding: 10px 16px;
-  border: 1px solid #e2e8f0;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.detailInputWrapper:focus-within {
-  background: white;
-  border-color: #6366f1;
-  box-shadow: 0 10px 20px rgba(99, 102, 241, 0.05);
-}
-
-.inputIcon {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #94a3b8;
-  transition: color 0.3s;
-}
-
-.detailInputWrapper:focus-within .inputIcon {
-  color: #6366f1;
-}
-
-.detailInputWrapper input {
-  width: 100%;
-  border: none;
-  background: transparent;
-  padding: 12px 0 4px 32px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #1e293b;
-  outline: none;
-}
-
-/* Tooltip/Lock Badge */
-.lockBadge {
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.1);
-  padding: 2px 8px;
-  border-radius: 6px;
-}
-
-/* Shimmering Button Effect */
-.vibrantSubmit {
-  position: relative;
-  overflow: hidden;
-  background: #6366f1;
-  color: white;
-  padding: 18px;
-  border-radius: 16px;
-  font-weight: 800;
-  transition: all 0.3s;
-}
-
-.shimmerEffect {
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
-  transition: 0.5s;
-}
-
-.vibrantSubmit:hover .shimmerEffect {
-  left: 100%;
-  transition: 0.7s;
-}
 .avatarSquare {
-  overflow: hidden; /* Keeps the image inside the box */
+  width: 64px;
+  height: 64px;
+  border-radius: 4px; /* Sharp professional look */
+  background-color: #334155;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
 }
 
-.avatarImg {
-  width: 100px;
-  height: 100px;
-  object-fit: cover; /* Prevents stretching */
-  transition: transform 0.3s ease;
-  border-radius: 50%;
+.cameraOverlay {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  text-transform: lowercase;
 }
 
-.avatarEditor:hover .avatarImg {
-  transform: scale(1.1);
+/* Inputs - The "SaaS" Look */
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
 }
 
-.avatarEditor {
-  cursor: pointer; /* Makes it feel clickable */
-}
-/* Container for the input + the eye */
-.passwordContainer {
-  position: relative;
-  display: flex;
-  align-items: center;
+.inputGroup {
+  margin-bottom: 20px;
 }
 
-/* Positioning the eye icon button inside the input */
-.eyeToggleButton {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
+.inputGroup label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #475569;
+}
+
+.inputGroup input, 
+.inputGroup textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #ffffff;
+  color: #0f172a;
+  box-sizing: border-box;
+}
+
+.inputGroup input:focus {
+  outline: none;
+  border-color: #1e293b;
+  box-shadow: 0 0 0 1px #1e293b;
+}
+
+.readonlyInput {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* Buttons */
+.saveChangesBtn {
+  background-color: #0f172a;
+  color: #ffffff;
+  padding: 12px 30px;
   border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
   cursor: pointer;
-  color: #94a3b8; /* Subtle gray */
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  transition: color 0.2s ease;
-  z-index: 10;
+  transition: opacity 0.2s;
 }
 
-.eyeToggleButton:hover {
-  color: #6366f1; /* Brand indigo on hover */
+.saveChangesBtn:hover {
+  opacity: 0.9;
 }
 
-/* Ensure the text doesn't go under the icon */
-.passwordContainer input {
-  padding-right: 45px !important;
+.logoutBtn {
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.logoutBtn:hover {
+  border-color: #94a3b8;
+  color: #1e293b;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 600px) {
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  .accountHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .saveChangesBtn, .logoutBtn {
+    width: 100%;
+    text-align: center;
+  }
 }

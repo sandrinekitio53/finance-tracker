@@ -188,3 +188,94 @@
   color: #6366f1;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
+/* analytics.css - Mobile View Rectification */
+
+@media (max-width: 768px) {
+  .analyticsContainer {
+    padding: 16px;
+    padding-bottom: 100px; /* Space for bottom nav if you have one */
+  }
+
+  /* 1. Header & Swipable Pill Navigation */
+  .analyticsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .chartSwitcher {
+    display: flex;
+    overflow-x: auto; /* Enable horizontal swipe */
+    width: 100vw;
+    margin-left: -16px; /* Bleed to edges for better feel */
+    padding: 4px 16px;
+    gap: 10px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+  }
+
+  .chartSwitcher::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
+
+  .chartSwitcher button {
+    flex: 0 0 auto; /* Stop pills from shrinking */
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    background: #f1f5f9;
+    border: none;
+    color: #64748b;
+    transition: all 0.2s ease;
+  }
+
+  .chartSwitcher button.active {
+    background: #2D31FA;
+    color: white;
+    box-shadow: 0 4px 10px rgba(45, 49, 250, 0.2);
+  } 
+  .statsGrid {
+    display: grid;
+    grid-template-columns: 1fr; 
+    gap: 12px;
+  }
+  .statCard {
+    padding: 16px;
+    border-radius: 18px;
+  }
+  .statCard.highlight {
+    background: #f0f1ff;
+    border: 1px solid #2D31FA;
+  }
+  .mainVisualSection {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 24px;
+  }
+  .chartBox {
+    height: 380px; 
+    padding: 20px 12px;
+  }
+  .chartHarness {
+    height: 280px !important; 
+  }
+  .categoryRowItem {
+    padding: 14px 10px;
+    font-size: 14px;
+    text-transform: capitalize;
+  }
+  .categoryValue {
+    font-weight: 900;
+    color: #1e293b;
+  }
+  .insightCard {
+    padding: 20px;
+    border-radius: 18px;
+    background: #1a1a1a;
+    color: white;
+  }  
+  .insightCard h4 { color: #f8fafc; margin-bottom: 8px; }
+   .insightCard h4 span {color: #2D31FA;text-transform: capitalize;}
+  .insightCard p { font-size: 13px; opacity: 0.8; line-height: 1.5; }
+}
