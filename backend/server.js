@@ -2,8 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const db = require('./db'); 
+const axios = require('axios');
 const session = require('express-session'); 
 const  saltRounds = 10;
+require('dotenv').config();
+console.log("🛠️ Testing .env loading...");
+console.log("CAMPAY_USER:", process.env.CAMPAY_USERNAME ? "✅ Found" : "❌ Missing");
 
 const app = express();
 
@@ -371,6 +375,8 @@ app.delete('/api/delete-budget/:id', async (req, res) => {
   await db.execute('DELETE FROM budgets WHERE id = ?', [req.params.id]);
   res.sendStatus(200);
 });
+
+
 // ----------------------------ACCOUNT ROUTE-----------------------------
 app.put('/api-update-full-account/:id', async (req, res) => {
     const userId = req.params.id;
@@ -385,14 +391,12 @@ app.put('/api-update-full-account/:id', async (req, res) => {
         ];
         let queryParams = [firstName, lastName, bio, profilePic];
 
-        // 2. Conditionally add password only if it's provided
         if (newPassword && newPassword.trim().length >= 6) {
             const hashedPassword = await bcrypt.hash(newPassword, 10);
             updateFields.push("password = ?");
             queryParams.push(hashedPassword);
         }
 
-        // 3. Finalize query
         const sql = `UPDATE users SET ${updateFields.join(', ')} WHERE id = ?`;
         queryParams.push(userId);
 
@@ -402,7 +406,6 @@ app.put('/api-update-full-account/:id', async (req, res) => {
             return res.status(404).json({ error: "User identity not found in vault." });
         }
 
-        // 4. Return the fresh user data (without password) for the frontend state
         res.status(200).json({
             message: "Vault synchronized!",
             user: { id: userId, firstName, lastName, email, bio, profilePic }
@@ -413,3 +416,110 @@ app.put('/api-update-full-account/:id', async (req, res) => {
         res.status(500).json({ error: "Critical failure during vault update." });
     }
 });
+
+
+// -----------------the automatic table generated from campay but couldnot work --------------------
+const getCampayToken = async () => {
+    try {
+        // Ensure variables exist before sending the request
+        if (!process.env.CAMPAY_USERNAME || !process.env.CAMPAY_APP_ID) {
+            throw new Error("Missing CamPay credentials in .env file");
+        }
+
+        const response = await axios.post("https://www.campay.net/api/token/", {
+            username: process.env.CAMPAY_USERNAME,
+            password: process.env.CAMPAY_PASSWORD,
+            app_id: process.env.CAMPAY_APP_ID
+        });
+
+        return response.data.token;
+    } catch (error) {
+        // Log the exact response from CamPay
+        console.error("CamPay API Error:", error.response?.data || error.message);
+        throw error; // This prevents the 500 error from being silent
+    }
+};
+
+const checkTransactionStatus = async (reference, userId, amount) => {
+    let attempts = 0;
+    const maxAttempts = 20; 
+
+    const interval = setInterval(async () => {
+        attempts++;
+        try {
+            const token = await getCampayToken();
+            const response = await axios.get(`https://www.campay.net/api/transaction/${reference}/`, {
+                headers: { 'Authorization': `Token ${token}` }
+            });
+
+            if (response.data.status === 'SUCCESSFUL') {
+                clearInterval(interval);
+                
+                // --- INSERT INTO YOUR EXISTING TABLE ---
+                const sql = `
+                    INSERT INTO transactions 
+                    (user_id, amount, type, category, status, method, date, title, externalReference, syncSource) 
+                    VALUES (?, ?, 'expense', 'Mobile Money', 'Complete', 'MoMo/OM', NOW(), ?, ?, 'automated')
+                `;
+
+                const title = `MoMo Sync: ${response.data.description || reference}`;
+
+                await db.execute(sql, [
+                    userId, 
+                    amount, 
+                    title, 
+                    reference
+                ]);
+                
+                console.log(`🚀 Vault Sync Complete: Reference ${reference} added to MySQL.`);
+            } else if (response.data.status === 'FAILED' || attempts >= maxAttempts) {
+                clearInterval(interval);
+            }
+        } catch (err) {
+            console.error("Polling Error:", err.message);
+        }
+    }, 7000); 
+};
+
+app.post('/api/collect-automated', async (req, res) => {
+    const { userId, phoneNumber, amount } = req.body;
+    if (!userId || !phoneNumber || !amount) {
+        return res.status(400).json({ 
+            message: "Missing required fields: userId, phoneNumber, and amount are mandatory." 
+        });
+    }
+
+    try {
+        console.log("🔑 Requesting CamPay Token...");
+        const token = await getCampayToken();
+        
+        console.log("📡 Initiating CamPay Collection...");
+        const response = await axios.post("https://www.campay.net/api/collect/", {
+            amount: amount,
+            currency: "XAF",
+            from: phoneNumber,
+            description: `Vault Sync User ${userId}`,
+            external_reference: `vlt${userId}${Date.now()}` 
+        }, {
+            headers: { 'Authorization': `Token ${token}` }
+        });
+
+        const reference = response.data.reference;
+        checkTransactionStatus(reference, userId, amount);
+
+        res.status(200).json({ success: true, reference });
+    } catch (error) {
+        // THIS IS THE KEY: Log what CamPay actually said
+        if (error.response) {
+            console.error("❌ CamPay API Error Data:", error.response.data);
+            console.error("❌ CamPay Status:", error.response.status);
+            return res.status(error.response.status).json({ 
+                error: "CamPay Refused Request", 
+                details: error.response.data 
+            });
+        }
+        console.error("❌ Server Error:", error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+

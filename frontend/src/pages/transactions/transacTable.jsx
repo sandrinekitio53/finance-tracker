@@ -1,7 +1,7 @@
 import React from 'react';
 import './transac.css';
 
-const TransacTable = ({ transactions, onDelete, onEdit }) => {
+const TransactionTable = ({ transactions, onDelete, onEdit }) => {
   if (!transactions || transactions.length === 0) {
     return <div className="no-data">No history found in database.</div>;
   }
@@ -17,24 +17,32 @@ const TransacTable = ({ transactions, onDelete, onEdit }) => {
             <th>Amount</th>
             <th>Status</th>
             <th>Actions</th>
+            <th>SyncSource</th>
           </tr>
         </thead>
         <tbody>
           {transactions.map((item) => (
          <tr id='trInfos' key={item.id} className={item.type === 'income' ? 'trIncome' : 'trExpense'}>
               <td className="colDate">{new Date(item.date).toLocaleDateString()}</td>
-              <td className="colCategory">{item.category}</td>
+             <td className="colCategory">
+      {/* 🤖 Youth-Friendly UI: Show robot icon if automated */}
+      {item.syncSource === 'automated' ? `🤖 ${item.category}` : item.category}
+    </td>
               <td className="colMethod">{item.method}</td>
               <td className={`colAmount ${item.type === 'income' ? 'incomeText' : 'expenseText'}`}>
                 {item.type === 'income' ? '+' : '-'}{Number(item.amount).toLocaleString()} frs
               </td>
+              
               <td className="colStatus">
                 <span className={`statusBadge ${item.status.toLowerCase()}`}>
                   {item.status}
                 </span>
               </td>
               <td className="colActions">
-                <button className="btnEdit" onClick={() => onEdit(item)}>✎</button>
+                {/* Clean Architecture: We hide the Edit button for Automated tasks to protect data integrity */}
+                {item.syncSource !== 'automated' && (
+                    <button className="btnEdit" onClick={() => onEdit(item)}>✎</button>
+                )}
                 <button className="btnDelete" onClick={() => onDelete(item.id)}>🗑</button>
               </td>
             </tr>
@@ -45,4 +53,4 @@ const TransacTable = ({ transactions, onDelete, onEdit }) => {
   );
 };
 
-export default TransacTable;
+export default TransactionTable;

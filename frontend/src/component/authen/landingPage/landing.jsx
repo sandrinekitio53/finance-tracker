@@ -5,7 +5,8 @@ import {
   Globe, Lock, Mail, Phone, MessageSquare, Send ,Star,
 } from "lucide-react";
 import "./landing.css";
-import heroImage from "../../../assets/bg.jpg";
+// import heroImage from "../../../assets/bg.jpg";
+import heroImage from "../../../assets/moneybg.jpeg";
 import dashboardImage from "../../../assets/money2.jpg";
 import { testimonialData, contactDetails,footerLinks } from "../../../assets/assets";
 

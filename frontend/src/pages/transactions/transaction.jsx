@@ -19,6 +19,46 @@ const Transactions = ({ user }) => {
   const rowsPerPage = 9;
   const API_BASE_URL = "http://localhost:8081";
 
+const handleAutomatedSync = async () => {
+    const rawPhone = window.prompt("Enter phone (237xxxxxxxxx):");
+    const rawAmount = window.prompt("Enter Amount:");
+
+    if (!rawPhone || !rawAmount) return;
+
+    // 🤖 Data Normalization
+    const sanitizedAmount = Number(rawAmount); // Convert string to Number
+    const sanitizedPhone = rawPhone.trim().replace(/\+/g, ''); // Remove plus signs
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/collect-automated`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId: user.id, // Ensure this is not null/undefined
+                phoneNumber: sanitizedPhone,
+                amount: sanitizedAmount 
+            })
+        });
+
+        if (!response.ok) {
+            // This captures the 400 error message from the server
+            const errorText = await response.text(); 
+            throw new Error(`Server responded with ${response.status}: ${errorText}`);
+        }
+
+        alert("🚀 Vault Sync Active! Confirm the prompt on your phone.");
+        
+        // Wait for polling to complete
+        setTimeout(() => {
+            fetchTransactions(); 
+            window.dispatchEvent(new Event("balanceUpdated"));
+        }, 15000); 
+
+    } catch (err) {
+        console.error("Sync Error Details:", err.message);
+        alert("Sync Failed: " + err.message);
+    }
+};
 //  gets data from user based on the database 
   const fetchTransactions = async () => {
     if (!user?.id) {
@@ -101,6 +141,9 @@ const Transactions = ({ user }) => {
       <div className="transactionsHeader">
         <h1 className="pageTitle">Transactions</h1>
         <div className="actionButtons">
+          <button className="addBtn syncBtn" onClick={handleAutomatedSync} style={{ backgroundColor: '#0f172a', color: 'white' }}>
+        Auto-Sync MoMo
+    </button>
           <button className="addBtn incomeBtn" onClick={() => openDrawer('income')}>
             Add Income
           </button>
