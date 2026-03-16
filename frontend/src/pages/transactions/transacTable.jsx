@@ -17,7 +17,7 @@ const TransactionTable = ({ transactions, onDelete, onEdit }) => {
             <th>Amount</th>
             <th>Status</th>
             <th>Actions</th>
-            <th>SyncSource</th>
+            {/* <th>SyncSource</th> */}
           </tr>
         </thead>
         <tbody>

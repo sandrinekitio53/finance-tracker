@@ -24,8 +24,6 @@
   letter-spacing: -0.5px;
   margin: 0;
 }
-
-/* Logic Blocks */
 .accountSection {
   margin-bottom: 50px;
 }
@@ -34,15 +32,13 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 25px;
+  /* margin-bottom: 25px; */
   font-size: 12px;
   font-weight: 700;
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 1.5px;
 }
-
-/* Industrial Avatar (Square with slight radius) */
 .avatarCenter {
   margin-bottom: 30px;
 }

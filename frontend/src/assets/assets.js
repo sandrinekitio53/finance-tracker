@@ -1,4 +1,8 @@
 import p1 from '../assets/1.jpg';
+import user1 from '../assets/user1.jpg';
+import user2 from '../assets/user2.jpg';
+import user3 from '../assets/user3.jpeg';
+import user4 from '../assets/user4.jpg';
 // import p2 from '../assets/download.jpg';
 // import bg1 from '../assets/download(1).jpeg';
 // import bg2 from '../assets/download(2).jpeg';
@@ -167,38 +171,38 @@ export const CATEGORIES = [
 export const testimonialData = [
   {
     id: 1,
-    initials: "JD",
-    name: "Jean-Paul D.",
+    initials: "EY",
+    name: "Eren Yegeur",
     rating: 5,
     theme: "indigo",
-    image: "/assets/testimonials/user1.jpg", 
+    image: user1, 
     body: "Finally, an app that understands FCFA! It’s the first time I’ve actually felt in control of my monthly business spending."
   },
   {
     id: 2,
-    initials: "SA",
-    name: "Sarah A.",
+    initials: "MA",
+    name: "Mikasa Akerman",
     rating: 5,
     theme: "pink",
-    image: null, 
+    image: user2, 
     body: "The interface is so smooth. Tracking my student allowance used to be a hassle, but now it’s my favorite daily habit."
   },
   {
-    id: 2,
-    initials: "SA",
-    name: "Sarah A.",
-    rating: 5,
+    id: 3,
+    initials: "LA",
+    name: "Livail Akerman",
+    rating: 3.5,
     theme: "pink",
-    image: null, 
+    image: user3, 
     body: "The interface is so smooth. Tracking my student allowance used to be a hassle, but now it’s my favorite daily habit."
   },
   {
-    id: 2,
+    id: 4,
     initials: "SA",
-    name: "Sarah A.",
-    rating: 5,
+    name: "Samira A.",
+    rating: 4,
     theme: "pink",
-    image: null, 
+    image: user4, 
     body: "The interface is so smooth. Tracking my student allowance used to be a hassle, but now it’s my favorite daily habit."
   },
 ];

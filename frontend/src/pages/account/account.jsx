@@ -123,7 +123,7 @@ const handleGlobalUpdate = async (e) => {
           </div>
 
           <div className="inputGroup">
-            <label>Vault Access Email</label>
+            <label>Email Address</label>
             <input type="email" value={user?.email || ''} readOnly className="readonlyInput" />
           </div>
 
@@ -142,7 +142,7 @@ const handleGlobalUpdate = async (e) => {
         {/* --- SECURITY SECTION --- */}
         <section className="accountSection">
           <div className="sectionTitle">
-            <Lock size={20} /> <span>Vault Security</span>
+            <Lock size={20} /> <span>Security check</span>
           </div>
           <p className="sectionHint">Leave blank if you don't want to change your password.</p>
           
