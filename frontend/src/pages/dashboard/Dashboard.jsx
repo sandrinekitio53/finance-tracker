@@ -1,8 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback,useRef } from 'react';
 import axios from 'axios';
 import './dashboard.css';
 import { Icons, summaryCardDetails } from '../../assets/assets';
-import { Plus, ArrowDownCircle, ArrowUpCircle, Target, X } from 'lucide-react';
+import { Plus, ArrowDownCircle, ArrowUpCircle, Target, X,Download, FileText, FileSpreadsheet, Image as ImageIcon } from 'lucide-react';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import Papa from 'papaparse';
+import html2canvas from 'html2canvas';
 
 const Dashboard = ({ user }) => {
   const [liveStats, setLiveStats] = useState({ balance: 0, income: 0, expenses: 0, savings: 0 });
@@ -14,6 +18,65 @@ const Dashboard = ({ user }) => {
   const [formData, setFormData] = useState({ title: "", amount: "", category: "" });
   const [showSuccess, setShowSuccess] = useState(false);
 
+  //  the export logic 
+
+  // Ref for JPEG Snapshot
+  const dashboardRef = useRef(null);
+const handleExport = (format) => {
+    // Prepare data for PDF/CSV
+    const exportData = recentTransactions.map(tx => ({
+      Date: formatTransactionDate(tx.date),
+      Title: tx.title,
+      Category: tx.category || "General",
+      Type: tx.type.toUpperCase(),
+      Amount: `${tx.amount} FCFA`
+    }));
+
+    if (format === 'csv') {
+      const csv = Papa.unparse(exportData);
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute("download", `FinGuard_Report_${new Date().toLocaleDateString()}.csv`);
+      link.click();
+    } 
+    
+    else if (format === 'pdf') {
+      const doc = new jsPDF();
+      doc.setFontSize(18);
+      doc.setTextColor(0, 86, 179); // FinGuard Blue
+      doc.text("FinGuard Transaction Report", 14, 20);
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 28);
+      
+    autoTable(doc, {
+    startY: 35,
+    head: [['Date', 'Title', 'Category', 'Type', 'Amount']],
+    body: exportData.map(Object.values),
+    headStyles: { fillColor: [0, 86, 179] },
+  });
+      doc.save("FinGuard_Transactions.pdf");
+    } 
+    
+    else if (format === 'jpeg') {
+      if (dashboardRef.current) {
+        html2canvas(dashboardRef.current, {
+      useCORS: true, 
+      scale: 2,
+      backgroundColor: "#ffffff" 
+    }).then((canvas) => {
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/jpeg", 1.0);
+      link.download = "FinGuard_Snapshot.jpg";
+      link.click();
+    });
+      }
+    }
+    setIsActionsOpen(false); // Close menu after selection
+  };
+  // --- 🟦 EXPORT LOGIC (FinGuard Blue Style) ---
+  
   const fetchDashboardData = useCallback(async () => {
     if (!user?.id) return;
 
@@ -116,7 +179,7 @@ const executeAction = async (e) => {
   };
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-container" ref={dashboardRef}>
       <header className="contentHeader" >
         <div className="headerWelcome">
           <h1 className="title">Welcome, { formattedName }</h1>
@@ -268,6 +331,15 @@ const executeAction = async (e) => {
           </button>
           <button className="action-item goal" onClick={() => openActionModal('goal')}>
             <Target size={20} /> <span>New Goal</span>
+          </button>  
+          <button className="action-item export" onClick={() => handleExport('pdf')}>
+            <FileText size={20} /> <span>Export PDF</span>
+          </button>
+          <button className="action-item export" onClick={() => handleExport('csv')}>
+            <FileSpreadsheet size={20} /> <span>Export CSV</span>
+          </button>
+          <button className="action-item export" onClick={() => handleExport('jpeg')}>
+            <ImageIcon size={20} /> <span>Save Image</span>
           </button>
         </div>
         <button className="main-fab" 
@@ -275,7 +347,7 @@ const executeAction = async (e) => {
           {isActionsOpen ? <X size={28} /> : <Plus size={28} />}
         </button>
       </div>
-    </div>
+       </div>
   );
 };
 

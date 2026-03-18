@@ -8,12 +8,28 @@
   z-index: 10;
 }
 .sidebarHeader {
-  padding: 30px 20px;
-  font-size: 1.7rem;
+  padding: 5px 10px;
+  display: flex;
+  gap: 5px;
+  flex-direction: row;
+  font-size: 1.5rem;
   font-weight: bold;
   text-align: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: 20px;
+}
+.sidebarHeader h3,.LogobarHeader h3{
+  background-image: linear-gradient(to left,#021B79,#0575E6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+.sidebarHeader img,.LogobarHeader img{
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border-color:#021B79 ;
 }
 .navMenu {
   flex: 1;

@@ -5,8 +5,9 @@ import {
   Globe, Lock, Mail, Phone, MessageSquare, Send ,Star,
 } from "lucide-react";
 import "./landing.css";
-// import heroImage from "../../../assets/bg.jpg";
-import heroImage from "../../../assets/moneybg.jpeg";
+import logo from '../../../assets/logo.png';
+import heroImage from "../../../assets/bg.jpg";
+// import heroImage from "../../../assets/moneybg.jpeg";
 import dashboardImage from "../../../assets/money2.jpg";
 import { testimonialData, contactDetails,footerLinks } from "../../../assets/assets";
 
@@ -38,10 +39,10 @@ const LandingPage = () => {
   return (
     <div className="landingRoot">
       <nav className="navbar">
-        <h2 className="logo">
-          <Zap className="brandIcon" fill="#4f46e5" size={24} />
-          FinGuard
-        </h2>
+          <div className="LogobarHeader">
+                <img src={logo} alt="" srcset="" />
+                <h3>Personal Finance </h3>
+              </div>
         <div className="nav-links">
           <a href="#features">Features</a>
           <a href="#overview">Overview</a>
@@ -60,7 +61,7 @@ const LandingPage = () => {
       <h1>Take Control of Your <span className="gradientText">Money</span> <br />
         Build Your Future in FCFA</h1>    
       <p>
-        The premium vault for tracking expenses and mastering your budget. 
+        The premium system for tracking expenses and mastering your budget. 
         Secure, simple, and built for the modern African lifestyle.
       </p>
 
@@ -281,8 +282,10 @@ const LandingPage = () => {
         <div className="footerTop">
           <div className="footerBrandSide">
             <div className="footerLogo">
-              <Zap fill="#4f46e5" color="#4f46e5" size={24} />
-              <span>FinGuard</span>
+             <div className="LogobarHeader">
+                <img src={logo} alt="" srcset="" />
+                <h3>Personal Finance </h3>
+              </div>
             </div>
             <p className="brandTagline">
               Empowering the next generation of Africans to master their FCFA 
@@ -307,7 +310,7 @@ const LandingPage = () => {
         </div>
 
         <div className="footerBottom">
-          <p>© {currentYear} FinGuard Africa. All rights reserved.</p>
+          <p>© {currentYear} Personal Finance. All rights reserved.</p>
           {/* <div className="socialIcons">
             <Twitter size={20} />
             <Github size={20} />

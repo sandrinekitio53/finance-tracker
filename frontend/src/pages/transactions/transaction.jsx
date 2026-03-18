@@ -25,30 +25,27 @@ const handleAutomatedSync = async () => {
 
     if (!rawPhone || !rawAmount) return;
 
-    // 🤖 Data Normalization
-    const sanitizedAmount = Number(rawAmount); // Convert string to Number
-    const sanitizedPhone = rawPhone.trim().replace(/\+/g, ''); // Remove plus signs
+    const sanitizedAmount = Number(rawAmount); 
+    const sanitizedPhone = rawPhone.trim().replace(/\+/g, ''); 
 
     try {
         const response = await fetch(`${API_BASE_URL}/api/collect-automated`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                userId: user.id, // Ensure this is not null/undefined
+                userId: user.id, 
                 phoneNumber: sanitizedPhone,
                 amount: sanitizedAmount 
             })
         });
 
         if (!response.ok) {
-            // This captures the 400 error message from the server
             const errorText = await response.text(); 
             throw new Error(`Server responded with ${response.status}: ${errorText}`);
         }
 
         alert("🚀 Vault Sync Active! Confirm the prompt on your phone.");
         
-        // Wait for polling to complete
         setTimeout(() => {
             fetchTransactions(); 
             window.dispatchEvent(new Event("balanceUpdated"));

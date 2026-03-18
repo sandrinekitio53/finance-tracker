@@ -2,6 +2,7 @@ import React from 'react'
 
 import { Link, useLocation } from 'react-router-dom';
 import { Icons, SidebarLinks } from '../../assets/assets';
+import logo from '../../assets/logo.png';
 import './sidebar.css'
 
 const Sidebar = ({ onLogout }) => {
@@ -9,7 +10,10 @@ const Sidebar = ({ onLogout }) => {
 
   return (
     <div className="sidebar">
-      <div className="sidebarHeader">logo-image FinanceTracker</div>
+      <div className="sidebarHeader">
+        <img src={logo} alt="" srcset="" />
+        <h3>Personal Finance </h3>
+      </div>
       
       <nav className="navMenu">
         {SidebarLinks.map((link) => {  

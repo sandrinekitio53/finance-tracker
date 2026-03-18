@@ -25,7 +25,6 @@ const TransactionTable = ({ transactions, onDelete, onEdit }) => {
          <tr id='trInfos' key={item.id} className={item.type === 'income' ? 'trIncome' : 'trExpense'}>
               <td className="colDate">{new Date(item.date).toLocaleDateString()}</td>
              <td className="colCategory">
-      {/* 🤖 Youth-Friendly UI: Show robot icon if automated */}
       {item.syncSource === 'automated' ? `🤖 ${item.category}` : item.category}
     </td>
               <td className="colMethod">{item.method}</td>
@@ -39,7 +38,6 @@ const TransactionTable = ({ transactions, onDelete, onEdit }) => {
                 </span>
               </td>
               <td className="colActions">
-                {/* Clean Architecture: We hide the Edit button for Automated tasks to protect data integrity */}
                 {item.syncSource !== 'automated' && (
                     <button className="btnEdit" onClick={() => onEdit(item)}>✎</button>
                 )}

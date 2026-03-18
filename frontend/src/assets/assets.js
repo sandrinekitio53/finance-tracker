@@ -212,14 +212,14 @@ export const contactDetails = [
     id: 1,
     icon: Mail,
     label: "Email Us",
-    value: "support@finguard.africa",
+    value: "support@personalFinance.com",
     color: "#4f46e5"
   },
   {
     id: 2,
     icon: Phone,
     label: "Call/WhatsApp",
-    value: "+237 6XX XX XX XX",
+    value: "+237 672 62 35 57",
     color: "#10b981"
   },
   {

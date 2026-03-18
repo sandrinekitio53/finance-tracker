@@ -315,7 +315,8 @@
   transform: scale(1.1);
 }
 .actions-menu {
-  display: flex;
+ display: grid;
+ grid-template-columns: repeat(2,1fr);
   flex-direction: column;
   gap: 10px;
   opacity: 0;
@@ -350,6 +351,14 @@
 .action-item.income { color: #10b981; }
 .action-item.expense { color: #ef4444; }
 .action-item.goal { color: #3b82f6; }
+.action-item.export {color: #0056b3; }
+.action-item.export:hover {background: #f0f4f8;}
+
+.menu-divider {
+    height: 1px;
+    background: #e0e0e0;
+    margin: 8px 0;
+}
 
 /* Mogul Modal System */
 .mogul-modal-overlay {
