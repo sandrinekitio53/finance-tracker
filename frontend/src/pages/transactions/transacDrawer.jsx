@@ -39,18 +39,31 @@ const TransactionDrawer = ({ isOpen, onClose, type, editData, onSave, userId }) 
     }
   }, [editData, isOpen, type]);
 
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prev) => ({ ...prev, [name]: value }));
+  // };
+  
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const { name, value } = e.target;
+  // If the field is 'amount', ensure it's not negative
+  const processedValue = name === "amount" ? Math.abs(value) : value;
+  setFormData((prev) => ({ ...prev, [name]: processedValue }));
+};
 
 const handleSubmit = async (e) => {
   e.preventDefault();
 
+  const numericAmount = Number(formData.amount);
+  if (numericAmount <= 0) {
+    alert("Please enter an amount greater than zero."); 
+    return; 
+  }
+
   const finalData = {
    user_id: userId, 
     title: formData.category || "New Transaction", 
-    amount: Number(formData.amount) || 0,
+    amount: numericAmount,
     type: type, 
     category: formData.category || null,
     status: formData.status || 'Complete',
@@ -90,7 +103,7 @@ const handleSubmit = async (e) => {
         <form onSubmit={handleSubmit} className="drawerForm">
           <div className="formGroup formAmt">
             <label>Amount (frs)</label>
-            <input name="amount" type="number" placeholder="0.00" value={formData.amount} onChange={handleInputChange} required />
+            <input name="amount" type="number" placeholder="0.00" min="0.01" step="0.01" value={formData.amount} onChange={handleInputChange} required />
           </div>
 
           <div className="formGroup">

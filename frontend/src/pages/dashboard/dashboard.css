@@ -258,14 +258,11 @@
   border-radius: 10px;
   transition: width 0.5s ease-in-out;
 }
-
-/* Responsive Design */
-
 /* -------Quick action stylings------------- */
 
 .editing-active {
   background: #fdfdfd;
-  border-left: 5px solid #6366f1; /* Matches your profile theme [cite: 2026-01-09] */
+  border-left: 5px solid #6366f1; 
   padding-left: 10px;
   border-radius: 8px;
 }
@@ -300,7 +297,7 @@
 .main-fab {
   width: 60px;
   height: 60px;
-  background: #3b82f6; /* Bright Azure */
+  background: #3b82f6;
   color: white;
   border: none;
   border-radius: 50%;

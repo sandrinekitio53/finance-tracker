@@ -25,7 +25,7 @@ const TransactionTable = ({ transactions, onDelete, onEdit }) => {
          <tr id='trInfos' key={item.id} className={item.type === 'income' ? 'trIncome' : 'trExpense'}>
               <td className="colDate">{new Date(item.date).toLocaleDateString()}</td>
              <td className="colCategory">
-      {item.syncSource === 'automated' ? `🤖 ${item.category}` : item.category}
+      {item.syncSource === 'automated' ? `${item.category}` : item.category}
     </td>
               <td className="colMethod">{item.method}</td>
               <td className={`colAmount ${item.type === 'income' ? 'incomeText' : 'expenseText'}`}>

@@ -89,7 +89,7 @@
 }
 
 /* ------------Submit Button -----------------*/
-.goalSubmitBtn {
+.goalSubmitBtn,.mogul-submit-btn {
   margin-top: 20px;
   padding: 16px;
   background-color: #3b82f6;

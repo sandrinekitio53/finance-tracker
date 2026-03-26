@@ -18,9 +18,6 @@ const Dashboard = ({ user }) => {
   const [formData, setFormData] = useState({ title: "", amount: "", category: "" });
   const [showSuccess, setShowSuccess] = useState(false);
 
-  //  the export logic 
-
-  // Ref for JPEG Snapshot
   const dashboardRef = useRef(null);
 const handleExport = (format) => {
     // Prepare data for PDF/CSV
@@ -44,8 +41,8 @@ const handleExport = (format) => {
     else if (format === 'pdf') {
       const doc = new jsPDF();
       doc.setFontSize(18);
-      doc.setTextColor(0, 86, 179); // FinGuard Blue
-      doc.text("FinGuard Transaction Report", 14, 20);
+      doc.setTextColor(0, 86, 179); 
+      doc.text("Personal Finance Transaction Report", 14, 20);
       doc.setFontSize(10);
       doc.setTextColor(100);
       doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 28);
@@ -56,7 +53,7 @@ const handleExport = (format) => {
     body: exportData.map(Object.values),
     headStyles: { fillColor: [0, 86, 179] },
   });
-      doc.save("FinGuard_Transactions.pdf");
+      doc.save("Personal Finance _Transactions.pdf");
     } 
     
     else if (format === 'jpeg') {
@@ -68,14 +65,13 @@ const handleExport = (format) => {
     }).then((canvas) => {
       const link = document.createElement("a");
       link.href = canvas.toDataURL("image/jpeg", 1.0);
-      link.download = "FinGuard_Snapshot.jpg";
+      link.download = "personal Finance_Snapshot.jpg";
       link.click();
     });
       }
     }
     setIsActionsOpen(false); // Close menu after selection
   };
-  // --- 🟦 EXPORT LOGIC (FinGuard Blue Style) ---
   
   const fetchDashboardData = useCallback(async () => {
     if (!user?.id) return;

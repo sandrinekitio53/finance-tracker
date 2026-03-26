@@ -44,7 +44,7 @@ const handleAutomatedSync = async () => {
             throw new Error(`Server responded with ${response.status}: ${errorText}`);
         }
 
-        alert("🚀 Vault Sync Active! Confirm the prompt on your phone.");
+        alert("Vault Sync Active! Confirm the prompt on your phone.");
         
         setTimeout(() => {
             fetchTransactions(); 
