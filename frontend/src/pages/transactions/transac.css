@@ -452,3 +452,43 @@ tbody tr{
   }
 
 }
+
+/* ==================== GROUP SEPARATOR ==================== */
+
+.groupSeparator {
+  background-color: #ffffff;
+  border-top: none;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.groupSeparator td {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #0052cc;
+  padding: 16px 20px !important;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.groupIndicator {
+  width: 12px;
+  height: 12px;
+  background-color: #0052cc;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* Mobile - Group Separator adjustments */
+@media (max-width: 768px) {
+  .groupSeparator td {
+    font-size: 0.9rem;
+    padding: 14px 15px !important;
+  }
+
+  .groupIndicator {
+    width: 10px;
+    height: 10px;
+  }
+}

@@ -98,6 +98,36 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* ==================== PASSWORD INPUT WRAPPER ==================== */
+
+.passwordInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordInputWrapper input {
+  width: 100%;
+  padding-right: 50px;
+}
+
+.passwordToggleBtn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 6px;
+  transition: color 0.2s;
+}
+
+.passwordToggleBtn:hover {
+  color: #4f46e5;
+}
+
 .p-option {
   text-align: center;
   margin-top: 25px;

@@ -9,6 +9,7 @@ function Login({ onLoginSuccess }) {
  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
  
@@ -41,7 +42,24 @@ const handleSubmit = async (event) => {
 
       <div className='l1'>
         <label htmlFor="password">Password</label>
-        <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <div className="passwordInputWrapper">
+          <input 
+            type={showPassword ? "text" : "password"} 
+            id="password" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+            required
+            placeholder="Enter password"
+          />
+          <button
+            type="button"
+            className="passwordToggleBtn"
+            onClick={() => setShowPassword(!showPassword)}
+            title={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? 'Hide' : 'Show'}
+          </button>
+        </div>
       </div>
 
       <button className ="logBtn" type="submit">Log In</button>

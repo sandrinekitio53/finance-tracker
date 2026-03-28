@@ -3,6 +3,8 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const db = require('./db'); 
 const axios = require('axios');
+const performBackup = require('./backupTask');
+const cleanupBackups = require('./backupTrash');
 const session = require('express-session'); 
 const  saltRounds = 10;
 require('dotenv').config();
@@ -34,6 +36,11 @@ app.use(session({
 
 const PORT = 8081;
 
+// --- HEALTH CHECK ENDPOINT ---
+app.get('/api-health', (req, res) => {
+    res.status(200).json({ status: 'Server is running ✅' });
+});
+
 // --- --------AUTHENTICATION  ROUTES---------
 
 app.get('/api-session', (req, res) => {
@@ -48,11 +55,16 @@ app.post('/api-register', async (req, res) => {
     try {
         const { firstName, lastName, email, password } = req.body;
 
-        if (!password) {
-            return res.status(400).json({ message: 'Password is required for registration.' });
+        // Validate all required fields
+        if (!firstName || !lastName || !email || !password) {
+            return res.status(400).json({ message: 'All fields (firstName, lastName, email, password) are required.' });
         }
 
-        // Hash the password AFTER it's been received from req.body
+        if (password.length < 6) {
+            return res.status(400).json({ message: 'Password must be at least 6 characters.' });
+        }
+
+        // Hash the password
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         
         const sqlInsert = 'INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)';
@@ -73,11 +85,14 @@ app.post('/api-register', async (req, res) => {
             user: newUser
         });
     } catch (error) {
-        console.error("Signup Sync Error:", error);
+        console.error("❌ Signup Error:", error.message, error.code);
         if (error.code === 'ER_DUP_ENTRY') {
             return res.status(400).json({ message: 'This email is already registered.' });
         }
-        res.status(500).json({ message: 'Server error during registration.' });
+        if (error.code === 'ER_NO_REFERENCED_ROW_2' || error.code === 'ER_NO_DEFAULT_FOR_FIELD') {
+            return res.status(500).json({ message: 'Database table error. Contact support.' });
+        }
+        res.status(500).json({ message: 'Server error during registration.', error: error.message });
     }
 });
 
@@ -236,10 +251,6 @@ app.delete('/api-delete-transaction/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Failed to delete.' });
     }
-});
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
 });
 
 app.put('/api-update-transaction/:id', async (req, res) => {
@@ -458,8 +469,8 @@ const checkTransactionStatus = async (reference, userId, amount) => {
                 // --- INSERT INTO YOUR EXISTING TABLE ---
                 const sql = `
                     INSERT INTO transactions 
-                    (user_id, amount, type, category, status, method, date, title, externalReference, syncSource) 
-                    VALUES (?, ?, 'expense', 'Mobile Money', 'Complete', 'MoMo/OM', NOW(), ?, ?, 'automated')
+                    (user_id, amount, type, category, status, method, date, title) 
+                    VALUES (?, ?, 'expense', 'Mobile Money', 'Complete', 'MoMo/OM', NOW(), ?)
                 `;
 
                 const title = `MoMo Sync: ${response.data.description || reference}`;
@@ -467,16 +478,19 @@ const checkTransactionStatus = async (reference, userId, amount) => {
                 await db.execute(sql, [
                     userId, 
                     amount, 
-                    title, 
-                    reference
+                    title
                 ]);
                 
                 console.log(`🚀 Vault Sync Complete: Reference ${reference} added to MySQL.`);
             } else if (response.data.status === 'FAILED' || attempts >= maxAttempts) {
                 clearInterval(interval);
+                console.error(`❌ Transaction polling failed or max attempts reached for ${reference}`);
             }
         } catch (err) {
             console.error("Polling Error:", err.message);
+            if (attempts >= maxAttempts) {
+                clearInterval(interval);
+            }
         }
     }, 7000); 
 };
@@ -523,3 +537,25 @@ app.post('/api/collect-automated', async (req, res) => {
     }
 });
 
+// ------- INITIALIZE BACKUP ON STARTUP -------
+console.log("🔧 Starting backup initialization...");
+try {
+    performBackup();
+    console.log("✅ performBackup() started");
+} catch (error) {
+    console.error("❌ BackupTask Error:", error.message);
+}
+
+try {
+    cleanupBackups();
+    console.log("✅ cleanupBackups() started");
+} catch (error) {
+    console.error("❌ BackupTrash Error:", error.message);
+}
+
+console.log("✅ Backup initialization completed.");
+
+// START SERVER
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+});

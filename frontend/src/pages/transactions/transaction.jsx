@@ -15,6 +15,7 @@ const Transactions = ({ user }) => {
   const [statusFilter, setStatusFilter] = useState('All');
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [methodFilter, setMethodFilter] = useState('All');
+  const [timeframeFilter, setTimeframeFilter] = useState('All'); // 'Month', 'Day', 'Year', 'All'
 
   const rowsPerPage = 9;
   const API_BASE_URL = "http://localhost:8081";
@@ -78,6 +79,7 @@ const handleAutomatedSync = async () => {
   }, [user?.id]);
 
   
+  
   const filteredTransactions = useMemo(() => {
     return (data || []).filter(item => {
       const matchStatus = statusFilter === 'All' || item.status === statusFilter;
@@ -87,12 +89,123 @@ const handleAutomatedSync = async () => {
     });
   }, [statusFilter, categoryFilter, methodFilter, data]);
 
-  // Pagination calculations
+  // Group transactions by timeframe (Day, Month, Year, or All)
+  const groupedTransactions = useMemo(() => {
+    const grouped = {};
+    
+    filteredTransactions.forEach(item => {
+      let key = '';
+      
+      if (timeframeFilter === 'All') {
+        key = 'All Transactions';
+      } else {
+        // Parse date - handle both ISO format and other formats
+        let date;
+        if (typeof item.date === 'string') {
+          date = new Date(item.date);
+        } else {
+          date = new Date();
+        }
+        
+        // Check if date is valid
+        if (isNaN(date.getTime())) {
+          console.warn('Invalid date for item:', item);
+          return;
+        }
+        
+        if (timeframeFilter === 'Day') {
+          key = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        } else if (timeframeFilter === 'Month') {
+          key = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+        } else if (timeframeFilter === 'Year') {
+          key = date.getFullYear().toString();
+        }
+      }
+      
+      if (!grouped[key]) {
+        grouped[key] = [];
+      }
+      grouped[key].push(item);
+    });
+    
+    console.log('Grouped transactions:', grouped, 'Timeframe:', timeframeFilter);
+    
+    // Sort groups by date (newest first)
+    const sortedGroups = Object.keys(grouped).sort((a, b) => {
+      if (timeframeFilter === 'All') return 0; // Keep natural order for 'All'
+      const dateA = new Date(grouped[a][0].date);
+      const dateB = new Date(grouped[b][0].date);
+      return dateB - dateA;
+    });
+    
+    const result = sortedGroups.map(key => ({
+      period: key,
+      transactions: grouped[key]
+    }));
+    
+    console.log('Final grouped result:', result);
+    return result;
+  }, [filteredTransactions, timeframeFilter]);
+
+  // Flatten grouped transactions for pagination
+  const flattenedTransactions = useMemo(() => {
+    return groupedTransactions.reduce((flat, group) => {
+      return [...flat, ...group.transactions];
+    }, []);
+  }, [groupedTransactions]);
+
+  // Pagination calculations - paginate flattened transactions
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = filteredTransactions.slice(indexOfFirstRow, indexOfLastRow);
-  const totalResults = filteredTransactions.length;
-  const showingCount = currentRows.length;
+  const paginatedTransactions = flattenedTransactions.slice(indexOfFirstRow, indexOfLastRow);
+  
+  // Re-group the paginated transactions for display
+  const currentRows = useMemo(() => {
+    const grouped = {};
+    
+    paginatedTransactions.forEach(item => {
+      let key = '';
+      
+      if (timeframeFilter === 'All') {
+        key = 'All Transactions';
+      } else {
+        let date;
+        if (typeof item.date === 'string') {
+          date = new Date(item.date);
+        } else {
+          date = new Date();
+        }
+        
+        if (timeframeFilter === 'Day') {
+          key = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        } else if (timeframeFilter === 'Month') {
+          key = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+        } else if (timeframeFilter === 'Year') {
+          key = date.getFullYear().toString();
+        }
+      }
+      
+      if (!grouped[key]) {
+        grouped[key] = [];
+      }
+      grouped[key].push(item);
+    });
+    
+    const sortedGroups = Object.keys(grouped).sort((a, b) => {
+      if (timeframeFilter === 'All') return 0;
+      const dateA = new Date(grouped[a][0].date);
+      const dateB = new Date(grouped[b][0].date);
+      return dateB - dateA;
+    });
+    
+    return sortedGroups.map(key => ({
+      period: key,
+      transactions: grouped[key]
+    }));
+  }, [paginatedTransactions, timeframeFilter]);
+  
+  const totalResults = flattenedTransactions.length;
+  const showingCount = paginatedTransactions.length;
 
   const openDrawer = (type) => {
     setEditingItem(null);
@@ -173,6 +286,13 @@ const handleAutomatedSync = async () => {
           <option value="OM">OM</option>
         </select>
 
+        <select className="filterDropdown" onChange={(e) => setTimeframeFilter(e.target.value)}>
+          <option value="All">Show All</option>
+          <option value="Month">Group By: Month</option>
+          <option value="Day">Group By: Day</option>
+          <option value="Year">Group By: Year</option>
+        </select>
+
         {/* <div className="dateFilter">
           <input type="date" className="filterInput" />
           <input type="date" className="filterInput" />
@@ -181,7 +301,7 @@ const handleAutomatedSync = async () => {
         
       <div className="tableWrapper">
         <TransactionTable 
-          transactions={currentRows} 
+          groupedTransactions={currentRows} 
           onDelete={handleDelete} 
           onEdit={handleEdit}
           isMobile={window.innerWidth <= 768}
@@ -199,7 +319,7 @@ const handleAutomatedSync = async () => {
 
       <div className="tableFooter">
         <p className="resultsCount">
-          {showingCount} Out of {totalResults}
+          Showing {showingCount} of {totalResults} Transactions
         </p>
         
         <div className="paginationControls">

@@ -3,9 +3,11 @@ import axios from 'axios';
 import { User, Mail, Lock, Camera, LogOut, FileText } from 'lucide-react';
 import './account.css';
 
-const Account = ({ user, onProfileUpdate, onLogout }) => {
+const Account = ({ user, onProfileUpdate }) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const fileInputRef = useRef(null);
 
   // Unified state for all fields
@@ -49,10 +51,25 @@ const Account = ({ user, onProfileUpdate, onLogout }) => {
 const handleGlobalUpdate = async (e) => {
     e.preventDefault();
     
-    // Safety check: Don't even hit the API if passwords don't match
-    if (formData.newPassword && formData.newPassword !== formData.confirmPassword) {
-        alert("Validation Error: Passwords do not match!");
-        return;
+    // Validation checks
+    if (formData.newPassword || formData.confirmPassword) {
+        // If either password field is filled, both must be filled
+        if (!formData.newPassword || !formData.confirmPassword) {
+            alert("Both password fields are required if you want to change your password!");
+            return;
+        }
+
+        // Check minimum length
+        if (formData.newPassword.length < 6) {
+            alert("Password must be at least 6 characters long!");
+            return;
+        }
+
+        // Check if passwords match
+        if (formData.newPassword !== formData.confirmPassword) {
+            alert("Passwords do not match! Please ensure both password fields are identical.");
+            return;
+        }
     }
 
     setIsUpdating(true);
@@ -85,9 +102,9 @@ const handleGlobalUpdate = async (e) => {
     <div className="unifiedAccountWrapper">
       <div className="accountHeader">
         <h1>Account Settings</h1>
-        <button className="logoutBtn" onClick={onLogout}>
+        {/* <button className="logoutBtn" onClick={onLogout}>
           <LogOut size={18} /> Sign Out
-        </button>
+        </button> */}
       </div>
 
       <form className="accountMainForm" onSubmit={handleGlobalUpdate}>
@@ -149,22 +166,44 @@ const handleGlobalUpdate = async (e) => {
           <div className="formRow">
             <div className="inputGroup">
               <label>New Master Password</label>
-              <input 
-                name="newPassword" 
-                type="password" 
-                value={formData.newPassword} 
-                onChange={handleInputChange} 
-                autoComplete="new-password"
-              />
+              <div className="passwordInputWrapper">
+                <input 
+                  name="newPassword" 
+                  type={showNewPassword ? "text" : "password"} 
+                  value={formData.newPassword} 
+                  onChange={handleInputChange} 
+                  autoComplete="new-password"
+                  placeholder="Enter new password (6+ characters)"
+                />
+                <button
+                  type="button"
+                  className="passwordToggleBtn"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                  title={showNewPassword ? "Hide password" : "Show password"}
+                >
+                  {showNewPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
             </div>
             <div className="inputGroup">
               <label>Confirm Password</label>
-              <input 
-                name="confirmPassword" 
-                type="password" 
-                value={formData.confirmPassword} 
-                onChange={handleInputChange} 
-              />
+              <div className="passwordInputWrapper">
+                <input 
+                  name="confirmPassword" 
+                  type={showConfirmPassword ? "text" : "password"} 
+                  value={formData.confirmPassword} 
+                  onChange={handleInputChange}
+                  placeholder="Re-enter password"
+                />
+                <button
+                  type="button"
+                  className="passwordToggleBtn"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  title={showConfirmPassword ? "Hide password" : "Show password"}
+                >
+                  {showConfirmPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
             </div>
           </div>
         </section>
